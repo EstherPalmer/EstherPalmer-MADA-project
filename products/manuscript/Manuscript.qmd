@@ -58,13 +58,23 @@ _It is recommended to use a structured abstract with Background/Methods/Results/
 # Introduction 
 
 ## General Background Information
-_Provide enough background on your topic that others can understand the why and how of your analysis_ 
+_Provide enough background on your topic that others can understand the why and how of your analysis_
+_Salmonella_ is an enteric bacteria responsible for over 1 million illnesses/year in the US. Nearly half of those ilnesses come from fresh produce (cite IFSAC report which hasn't been updated for most recent year due to stupid politics). One of the main ways produce can become contaminated with _Salmonella_ is due to the use of contaminated irrigation water. As such it is important to study the dynamics of _Salmonella_ populations in water.
+_Salmonella_ is an incredibly diverse organism with over 2600 serovars (cite kaufmann white scheme). These different serovars pose different risks to human and agricultural health. (insert statistic about how like only 100 of those 2600 serovars really cause human illness). As such it is important to study _Salmonella_ on a serovar level
 
 ## Description of data and data source
 _Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
+We went sampling for _Salmonella_ at an urban creek every weekday for 6 months (179 days from start, ~150 days total not including weekends), and then once a week for another 9 months or so. I will probably focus my analysis on only that 6 month period. Prevalence of _Salmonella_ was ~96% (will double check # later). 
+We also collected environmental data (pH turbidity conductivity flow depth etc.) as well as weather data from the nearest UGA weather station (insert link).
+CRISPR-seroseq was performed on the samples to get serovar level population data
+I also have whole genome sequencing data for some samples/isolates, but that may be outside the scope of this project for now
 
 ## Questions/Hypotheses to be addressed
 _State the research questions you plan to answer with this analysis._
+
+Given that the prevalence of _Salmonella_ is so high I don't think it would be productive to attempt to model for _Salmonella_ prevalence. Also previous studies attempting to model for this using environmental/weather data all come up with contradictory results.
+I can instead attempt to see if environmental/weather data affects _Salmonlla_ complexity (complexity = # serovars/sample) which is not something other papers have looked at/been able to look at.
+I also would like to see if environmental/weather variables affect the prevalence of specific _Salmonella_ serovars. (For example, are we more likely to find Muenchen on hot days, or Anatum after rain)
 
 To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the BibTeX file specified in the YAML header above and have the right BibTeX key. Then you can include like this:
 
