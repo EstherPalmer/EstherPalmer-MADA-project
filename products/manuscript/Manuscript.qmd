@@ -75,6 +75,7 @@ _State the research questions you plan to answer with this analysis._
 Given that the prevalence of _Salmonella_ is so high I don't think it would be productive to attempt to model for _Salmonella_ prevalence. Also previous studies attempting to model for this using environmental/weather data all come up with contradictory results.
 I can instead attempt to see if environmental/weather data affects _Salmonlla_ complexity (complexity = # serovars/sample) which is not something other papers have looked at/been able to look at.
 I also would like to see if environmental/weather variables affect the prevalence of specific _Salmonella_ serovars. (For example, are we more likely to find Muenchen on hot days, or Anatum after rain)
+One thing that may make things more complicated or may help is that I do have all the values from every day, so I can ask things like whether the weather the day before or day of sampling is more important. So maybe rain the day before sampling has more of an impact than rain the day of sampling.
 
 To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the BibTeX file specified in the YAML header above and have the right BibTeX key. Then you can include like this:
 
