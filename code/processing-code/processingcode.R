@@ -22,31 +22,34 @@ library(here) #to set paths
 ## ---- loaddata --------
 #path to data
 #note the use of the here() package and not absolute paths
-data_location <- here::here("data","raw-data","Environmental_Data_Final.xlsx")
+enviro_data_location <- here::here("data","raw-data","Environmental_Data_Final.xlsx")
+CSS_data_location <- here::here("data", "raw-data", "Daily_Sampling_Normalized_CSS_6mo.xlsx")
 #load data. 
 #note that for functions that come from specific packages (instead of base R)
 # I often specify both package and function like so
 #package::function() that's not required one could just call the function
 #specifying the package makes it clearer where the function "lives",
 #but it adds typing. You can do it either way.
-rawdata <- readxl::read_excel(data_location, sheet = "Sheet2")
+enviro_rawdata <- readxl::read_excel(enviro_data_location, sheet = "Sheet2")
 #I am going to use the dataset that excludes weekends for this preliminary look, Sheet1 contains the data that has weekends
+CSS_rawdata <- readxl::read_excel(CSS_data_location)
+#This will read in the CSS data
 # We might also want to load the codebook to look at it
 #codebook <- readxl::read_excel(data_location, sheet ="Codebook")
 #I don't have a codebook so I will leave it out for now
 
 ## ---- exploredata --------
 #take a look at the data
-dplyr::glimpse(rawdata)
+dplyr::glimpse(enviro_rawdata)
 #another way to look at the data
-summary(rawdata)
+summary(enviro_rawdata)
 #The summary seems to be reading some of the data as characters rather than values
 #yet another way to get an idea of the data
-head(rawdata)
+head(enviro_rawdata)
 #this is a nice way to look at data
-skimr::skim(rawdata)
+skimr::skim(enviro_rawdata)
 #look in the Codebook for a variable explanation
-print(codebook)
+#print(codebook)
 
 
 ## ---- cleandata1 --------
