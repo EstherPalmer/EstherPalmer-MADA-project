@@ -24,16 +24,18 @@ library(knitr)
 
 **Authors**  
 
-* First Author$^{1,2,*}$ (ORCID: 0000-0000-1234-5678) 
-* Second Author$^{3, *}$
-* Third Author$^{3, \dagger}$
-* Last Author$^{1, 2, \land}$ 
+* Esther Palmer$^{1}$ (ORCID: 0000-0000-1234-5678) 
+* Dawson Deal$^{1}$
+* Kaya Palukaitis$^{1}$
+* Elisabeth Drake$^{2}$ 
+* Erin Lipp$^{2}$ 
+* Nikki Shariat$^{1, \land}$ 
 
 **Author affiliations**  
 
-1. College of Public Health, University of Georgia, Athens, GA, USA.
-2. Another Affiliation, Athens, GA, USA.
-3. Yet another Affiliation.
+1. Departments of Microbiology and Population Health, University of Georgia, Athens, GA, USA.
+2. Environmental something? will fix later, University of Georgia, Athens, GA, USA.
+
 
 $*$ These authors contributed equally to this work.
 
@@ -42,6 +44,7 @@ $\land$ Corresponding author: some@email.com
 $\dagger$ Disclaimer: The opinions expressed in this article are the
 author's own and don't reflect their employer.
 
+I (Esther) will be the only one doing modeling on this project, however I do want to acknowledge the undergrads who did a majority of the actual data collection (Dawson and Kaya) because they are fantastic, as well as our collaborators in other labs who helped with some of the other data generation.
 
 {{< pagebreak >}}
 
@@ -60,14 +63,20 @@ _It is recommended to use a structured abstract with Background/Methods/Results/
 ## General Background Information
 _Provide enough background on your topic that others can understand the why and how of your analysis_
 _Salmonella_ is an enteric bacteria responsible for over 1 million illnesses/year in the US. Nearly half of those ilnesses come from fresh produce (cite IFSAC report which hasn't been updated for most recent year due to stupid politics). One of the main ways produce can become contaminated with _Salmonella_ is due to the use of contaminated irrigation water. As such it is important to study the dynamics of _Salmonella_ populations in water.
-_Salmonella_ is an incredibly diverse organism with over 2600 serovars (cite kaufmann white scheme). These different serovars pose different risks to human and agricultural health. (insert statistic about how like only 100 of those 2600 serovars really cause human illness). As such it is important to study _Salmonella_ on a serovar level
+_Salmonella_ is an incredibly diverse organism with over 2600 serovars (cite kaufmann white scheme). These different serovars pose different risks to human and agricultural health. (insert statistic about how like only 100 of those 2600 serovars really cause human illness). As such it is important to study _Salmonella_ on a serovar level.
+
+It has been well established that _Salmonella_ can be found in surface water such as creeks/rivers/ponds/lakes (Insert literally all the refs), and that such samples typically contain high diversity of Serovars (Deavon 2021, Smith/Siceloff 2025, My CC paper if I can ever get it out the door). However, much is unknown about the daily population dynamics of these serovars over time.
+
+The purpose of this study is to figure out what _Salmonella_ does on a daily basis. Are populations stable? Do we see lots of changes? How long does a given serovar stay in the creek? The purpose of this project for this class is to look at how environmental and weather variables affect _Salmonella_ serovars in the creek.
 
 ## Description of data and data source
 _Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
 We went sampling for _Salmonella_ at an urban creek every weekday for 6 months (179 days from start, ~150 days total not including weekends), and then once a week for another 9 months or so. I will probably focus my analysis on only that 6 month period. Prevalence of _Salmonella_ was ~96% (will double check # later). 
 We also collected environmental data (pH turbidity conductivity flow depth etc.) as well as weather data from the nearest UGA weather station (insert link).
+Overall I believe that there are 22 environmental variables I have data for (not including date). Many of them will be correlated and some can be dropped. For example, salinity while collected has only ever been not 0 once in all my years of collecting it.
+I have not cleaned or really ever checked the weather data, however any missing data can be obtained by emailing the weather people because they keep records of all this.
 CRISPR-seroseq was performed on the samples to get serovar level population data
-I also have whole genome sequencing data for some samples/isolates, but that may be outside the scope of this project for now
+I also have whole genome sequencing data for some samples/isolates, but that may be outside the scope of this project for this class.
 
 ## Questions/Hypotheses to be addressed
 _State the research questions you plan to answer with this analysis._
