@@ -22,23 +22,25 @@ library(here) #to set paths
 ## ---- loaddata --------
 #path to data
 #note the use of the here() package and not absolute paths
-data_location <- here::here("data","raw-data","exampledata.xlsx")
+data_location <- here::here("data","raw-data","Environmental_Data_Final.xlsx")
 #load data. 
 #note that for functions that come from specific packages (instead of base R)
 # I often specify both package and function like so
 #package::function() that's not required one could just call the function
 #specifying the package makes it clearer where the function "lives",
 #but it adds typing. You can do it either way.
-rawdata <- readxl::read_excel(data_location)
+rawdata <- readxl::read_excel(data_location, sheet = "Sheet2")
+#I am going to use the dataset that excludes weekends for this preliminary look, Sheet1 contains the data that has weekends
 # We might also want to load the codebook to look at it
-codebook <- readxl::read_excel(data_location, sheet ="Codebook")
-
+#codebook <- readxl::read_excel(data_location, sheet ="Codebook")
+#I don't have a codebook so I will leave it out for now
 
 ## ---- exploredata --------
 #take a look at the data
 dplyr::glimpse(rawdata)
 #another way to look at the data
 summary(rawdata)
+#The summary seems to be reading some of the data as characters rather than values
 #yet another way to get an idea of the data
 head(rawdata)
 #this is a nice way to look at data
