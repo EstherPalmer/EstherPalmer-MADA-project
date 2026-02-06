@@ -75,7 +75,7 @@ We went sampling for _Salmonella_ at an urban creek every weekday for 6 months (
 We also collected environmental data (pH turbidity conductivity flow depth etc.) as well as weather data from the nearest UGA weather station (insert link).
 Overall I believe that there are 22 environmental variables I have data for (not including date). Many of them will be correlated and some can be dropped. For example, salinity while collected has only ever been not 0 once in all my years of collecting it.
 I have not cleaned or really ever checked the weather data, however any missing data can be obtained by emailing the weather people because they keep records of all this.
-CRISPR-seroseq was performed on the samples to get serovar level population data
+CRISPR-SeroSeq (CSS) was performed on the samples to get serovar level population data. CSS data was collected for both RV and TT samples, then reads were normalized using DeSeq2 and then averaged across the two sample types to create one entry per collection day. There are some days where CSS didn't work.
 I also have whole genome sequencing data for some samples/isolates, but that may be outside the scope of this project for this class.
 
 ## Questions/Hypotheses to be addressed
@@ -122,6 +122,26 @@ _As applicable, explain where and how you got the data. If you directly import t
 ## Data import and cleaning
 _Write code that reads in the file and cleans it so it's ready for analysis. Since this will be fairly long code for most datasets, it might be a good idea to have it in one or several R scripts. If that is the case, explain here briefly what kind of cleaning/processing you do, and provide more details and well documented code somewhere (e.g. as supplement in a paper). All materials, including files that contain code, should be commented well so everyone can follow along._
 
+```{r}
+#path to data
+enviro_data_location <- here::here("data","raw-data","Environmental_Data_Final.xlsx")
+CSS_data_location <- here::here("data", "raw-data", "Daily_Sampling_Normalized_CSS_6mo.xlsx")
+#load data.
+#there are 2 files, one containing the environmental/weather data, and one containing CSS data
+enviro_rawdata <- readxl::read_excel(enviro_data_location, sheet = "Sheet2")
+#I am going to use the dataset that excludes weekends for this preliminary look, Sheet1 contains the data that has weekends
+CSS_rawdata <- readxl::read_excel(CSS_data_location)
+#This will read in the CSS data
+```
+This code chunk loads my raw data. I have two files, one with completed CSS analysis, and another with environmental and weather variables. The environmental and weather variable excel sheet has 2 sheets, on sheet1 there is all the data including the weather data for the weekends. On sheet2 the weekend data was removed and only data for the day of sampling was left.
+
+```{r}
+dplyr::glimpse(enviro_rawdata)
+#looking at the raw environmental data
+summary(enviro_rawdata)
+```
+
+This provides a look at all the environmental data. I can see several variables have been listed as characters when they need to be numeric, and there are several NAs so I will have some cleaning to do in the future. I also don't trust DO I think the instrument was acting up so I kinda want to drop the whole variable. Day is also being treated like a numeric variable rather than an ordinal (I think ordinal? it has order) variable. Although maybe it is quantitative since you can do things like addition to it?
 
 ## Statistical analysis
 _Explain anything related to your statistical analyses._
