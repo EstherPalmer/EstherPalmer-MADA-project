@@ -17,7 +17,7 @@ library(dplyr) #for data processing/cleaning
 library(tidyr) #for data processing/cleaning
 library(skimr) #for nice visualization of data 
 library(here) #to set paths
-
+library(ggplot2) #for figures
 
 ## ---- loaddata --------
 #path to data
@@ -50,6 +50,9 @@ head(enviro_rawdata)
 skimr::skim(enviro_rawdata)
 #look in the Codebook for a variable explanation
 #print(codebook)
+
+#fig1 <- CSS_rawdata %>% ggplot(aes(x=)) + geom_area()
+#plot(fig1)
 
 
 ## ---- cleandata1 --------
