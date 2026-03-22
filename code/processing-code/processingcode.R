@@ -188,15 +188,18 @@ d7 <- d7 %>% mutate(complexity = sum(c_across(Anat:MuenII) >0, na.rm=TRUE))
 
 ## ---- joindata --------
 #It will be helpful if these two data sets can go in one sheet
-
+d8 <- merge(d3, d7, by = "Day")
 
 ## ---- savedata --------
 processed_enviro_data <- d3
-processed_CSS_data <- 
+processed_CSS_data <- d7
+merged_data <- d8
 # location to save file
 save_data_location1 <- here::here("data","processed-data","processed_enviro_data.rds")
 save_data_location2 <- here::here("data","processed-data","processed_CSS_data.rds")
+save_data_location3 <- here::here("data","processed-data","processed_merged_data.rds")
 saveRDS(processed_enviro_data, file = save_data_location1)
 saveRDS(processed_CSS_data, file = save_data_location2)
+saveRDS(merged_data, file = save_data_location3)
 
 ## ---- notes --------
