@@ -18,6 +18,7 @@ library(tidyr) #for data processing/cleaning
 library(skimr) #for nice visualization of data 
 library(here) #to set paths
 library(ggplot2) #for figures
+library(janitor) #for naming columns as rows
 
 ## ---- loaddata --------
 #path to data
@@ -32,7 +33,7 @@ CSS_data_location <- here::here("data", "raw-data", "Daily_Sampling_Normalized_C
 #but it adds typing. You can do it either way.
 enviro_rawdata <- readxl::read_excel(enviro_data_location, sheet = "Sheet2")
 #I am going to use the dataset that excludes weekends for this preliminary look, Sheet1 contains the data that has weekends
-CSS_rawdata <- readxl::read_excel(CSS_data_location)
+CSS_rawdata <- readxl::read_excel(CSS_data_location, col_names = FALSE)
 #This will read in the CSS data
 # We might also want to load the codebook to look at it
 #codebook <- readxl::read_excel(data_location, sheet ="Codebook")
@@ -145,10 +146,57 @@ d3$width <- w3$cm
 
 skim(d3)
 
+## ---- cleandata6 --------
+#It will be easier if the CSS data is transposed so I can match days from the CSS data to the days from weather data
+d4 <- as.data.frame(CSS_rawdata)
+d4 <- t(d4)
+d4 <- as.data.frame(d4)
+#without this last command I wasn't actually able to see anything in the matrix which concerned me
+d5 <- d4 %>% janitor::row_to_names(row_number = 1)
+#made row 1 (my serovar names) into the column!
+d5 <- d5 %>% rename(
+  Day = GeneID
+)
+#This renamed GeneID (an artifact of DeSeq2) to Day
+#This will allow me to match CSS data to environmental data
+
+d5$Day <- gsub("D", "", d5$Day)
+#This removed the D in front of the numbers
+
+d5$Day <- as.character(d5$Day)
+#again so this matches the other sheet
+
+skim(d5)
+
+## ---- cleandata7 --------
+#It looks like everything is a character, which is incorrect
+d6 <- d5 %>% mutate_at(vars(Anat, AquaInve, BrazI, Brae, Infa, MontII, MuenI, Mues, Rubi, Typm, Gamn, GiveI, NewpII, MissII, MontI, Hart, Agbe, Hada, Mine, Oran, Saitll, Luci, BertBuda), as.numeric)
+d6 <- d6 %>% rename(
+  KisrI = Kisrl,
+  MbanI = Mbanl,
+  MuenII = Muenll
+)
+#someone named a couple of the polyphyletic serovars using an L instead of roman numerals lol
+
+d6 <- d6 %>% mutate_at(vars(KisrI, MbanI, MuenII), as.numeric)
+
+## ---- complexity --------
+d7 <- d6 %>% rowwise(Day)
+d7 <- d7 %>% mutate(complexity = sum(c_across(Anat:MuenII) >0, na.rm=TRUE))
+#This counts all of the serovars in a sample (or # of instances where proportion >0)
+#complexity is what I will be modeling for
+
+## ---- joindata --------
+#It will be helpful if these two data sets can go in one sheet
+
+
 ## ---- savedata --------
-processeddata <- d3
+processed_enviro_data <- d3
+processed_CSS_data <- 
 # location to save file
-save_data_location <- here::here("data","processed-data","processed_enviro_data.rds")
-saveRDS(processeddata, file = save_data_location)
+save_data_location1 <- here::here("data","processed-data","processed_enviro_data.rds")
+save_data_location2 <- here::here("data","processed-data","processed_CSS_data.rds")
+saveRDS(processed_enviro_data, file = save_data_location1)
+saveRDS(processed_CSS_data, file = save_data_location2)
 
 ## ---- notes --------
