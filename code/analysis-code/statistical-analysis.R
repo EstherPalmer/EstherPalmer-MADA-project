@@ -9,6 +9,8 @@ library(ggplot2) #for plotting
 library(broom) #for cleaning up output from lm()
 library(here) #for data loading/saving
 library(tidymodels) #for modeling
+library(randomForest) #for randomforest modeling
+library(caret) #modeling
 
 #path to data
 #note the use of the here() package and not absolute paths
@@ -94,3 +96,28 @@ tidy(lm_fit)
 #will ask undergrads later
 #so for now split into training and test data, redo better later
 
+############################
+#### Random Forest attempt
+
+#I don't know that this is going well, may try something else?
+#I know previous lab members have used this to narrow down the amount of variables in their data
+df3 <- mydata %>% select(-ET, -COND, -Day, -Date, - Weekday, -max.temp, -min.temp, -twoinST, -fourinST, -eightinST)
+df3 <- df3 %>% select(-Anat, -AquaInve, -BrazI, -Brae, -Infa, -MontII, -MuenI, -Mues, -Rubi, -Typm, -Gamn, -GiveI, 
+  -NewpII, -MissII, -MontI, -Hart, -Agbe, -Hada, -Mine, -Oran, -Saitll, -KisrI, -MbanI, -Luci, -BertBuda, -MuenII)
+
+df3$complexity <- as.integer(df3$complexity)
+set.seed(222)
+ind <- sample(2, nrow(df3), replace = TRUE, prob = c(.8, .2))
+train <- df3[ind==1,]
+test <- df3[ind==2,]
+#So from what I can tell, I assigned 80% of the data to train, and 20% to test
+
+rf <- randomForest(complexity~., data=train, na.action = na.roughfix)
+print(rf)
+#na.roughfix estimates missing values, which I'm hoping will lead to less nas in the prediction
+
+pred1 <- predict(rf, train)
+#there's a lot of NA's
+#it did not like that complexity and pred1 are not factors
+#It further does not like that they don't match
+confusionMatrix(as.factor(pred1), as.factor(train$complexity))
