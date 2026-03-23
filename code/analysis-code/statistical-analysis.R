@@ -82,16 +82,35 @@ table_file1 = here("results", "tables", "resulttable1.rds")
 saveRDS(cor_matrix2, file = table_file1)
 #I think this saves it as a table
 
+df3 <- mydata %>% select(-ET, -COND, -Day, -Date, - Weekday, -max.temp, -min.temp, -twoinST, -fourinST, -eightinST)
+df3 <- df3 %>% select(-Anat, -AquaInve, -BrazI, -Brae, -Infa, -MontII, -MuenI, -Mues, -Rubi, -Typm, -Gamn, -GiveI, 
+  -NewpII, -MissII, -MontI, -Hart, -Agbe, -Hada, -Mine, -Oran, -Saitll, -KisrI, -MbanI, -Luci, -BertBuda, -MuenII)
+#note to self: rename saintpaul later so there's II instead of ll
+
+df3$complexity <- as.integer(df3$complexity)
+set.seed(222)
+ind <- sample(2, nrow(df3), replace = TRUE, prob = c(.8, .2))
+train <- df3[ind==1,]
+test <- df3[ind==2,]
+#So from what I can tell, I assigned 80% of the data to train, and 20% to test
+
 lm_fit <- linear_reg() %>% set_engine("glm") %>%
   fit(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg,
-  data = mydata)
+  data = train)
 tidy(lm_fit)
 #This is interesting but far from perfect
 #Should maybe run a random forest whatever to select variables for use
 #This also doesn't show a good relationship between temp and complexity despite my dotplots showing one
-lm_pred <- predict(lm_fit, mydata) %>% bind_cols(mydata %>% select(complexity))
+lm_train_pred <- predict(lm_fit, train) %>% 
+  bind_cols(train %>% select(complexity))
 
-lm_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
+lm_train_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
+
+lm_test_pred <- predict(lm_fit, test) %>% 
+  bind_cols(test %>% select(complexity))
+
+lm_test_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
+#better rmse on the test than the training which is interesting
 
 #ok so for now I will need to split into test and training data
 #I do actually have a second dataset that I can use from this same site with all the same variables just sampling weekly instead of daily
@@ -105,17 +124,7 @@ lm_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
 
 #I don't know that this is going well, may try something else?
 #I know previous lab members have used this to narrow down the amount of variables in their data
-df3 <- mydata %>% select(-ET, -COND, -Day, -Date, - Weekday, -max.temp, -min.temp, -twoinST, -fourinST, -eightinST)
-df3 <- df3 %>% select(-Anat, -AquaInve, -BrazI, -Brae, -Infa, -MontII, -MuenI, -Mues, -Rubi, -Typm, -Gamn, -GiveI, 
-  -NewpII, -MissII, -MontI, -Hart, -Agbe, -Hada, -Mine, -Oran, -Saitll, -KisrI, -MbanI, -Luci, -BertBuda, -MuenII)
-#note to self: rename saintpaul later so there's II instead of ll
 
-df3$complexity <- as.integer(df3$complexity)
-set.seed(222)
-ind <- sample(2, nrow(df3), replace = TRUE, prob = c(.8, .2))
-train <- df3[ind==1,]
-test <- df3[ind==2,]
-#So from what I can tell, I assigned 80% of the data to train, and 20% to test
 
 #rf <- randomForest(complexity~., data=train, na.action = na.roughfix)
 #print(rf)
@@ -138,3 +147,14 @@ rf_train_pred <- predict(rf_fit, train) %>%
 #unlike my last random forest this is predicting less NA's which is good
 
 rf_train_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
+
+rf_test_pred <- predict(rf_fit, test) %>%
+  bind_cols(test %>% select(complexity))
+
+rf_test_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
+#This still looks like a better rmse than the linear model?
+#have no idea what my acutal model looks like though
+
+#I think that while this random forest model is maybe a better fit than my linear model,
+#since I can't seem to learn the final formula, it may be better to stick with my linear model
+#since I do need to know what my predictors are
