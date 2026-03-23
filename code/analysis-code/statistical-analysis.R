@@ -85,3 +85,12 @@ lm_fit <- linear_reg() %>% set_engine("glm") %>%
 tidy(lm_fit)
 #This is interesting but far from perfect
 #Should maybe run a random forest whatever to select variables for use
+#This also doesn't show a good relationship between temp and complexity despite my dotplots showing one
+
+#ok so for now I will need to split into test and training data
+#I do actually have a second dataset that I can use from this same site with all the same variables just sampling weekly instead of daily
+#and I plan to use that second data set to train my model
+#however I don't know where exactly that is and I don't want to go searching I also don't know if it's fully finished
+#will ask undergrads later
+#so for now split into training and test data, redo better later
+
