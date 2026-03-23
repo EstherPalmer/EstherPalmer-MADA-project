@@ -74,12 +74,12 @@ cor_matrix2
 #I will need to remove: cond or TDS, radiation or ET
 #I will remove ET from my model bc I don't think how much water evaporates from plants is physiologically relevent to salmonella
 #This means I'm keeping radiation
-#I will remove conductivity bc vibes
+#I will remove conductivity bc vibes, will find a more scientific method later
 table_file1 = here("results", "tables", "resulttable1.rds")
 saveRDS(cor_matrix2, file = table_file1)
 #I think this saves it as a table
 
-lm_fit <- linear_reg() %>% 
+lm_fit <- linear_reg() %>% set_engine("glm") %>%
   fit(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg,
   data = mydata)
 tidy(lm_fit)
