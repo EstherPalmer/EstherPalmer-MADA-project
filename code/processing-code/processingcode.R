@@ -57,9 +57,10 @@ skimr::skim(enviro_rawdata)
 
 
 ## ---- cleandata1 --------
-d1 <- dplyr::select(enviro_rawdata, -DO)
+d1 <- dplyr::select(enviro_rawdata, -DO, -SALT)
 #removes dissolved oxygen from the data set since I belive the instrument stopped working
 #the - means remove
+#also removed salinity bc there was only one instance where it was not 0
 
 ## ---- cleandata2 --------
 d1 <- d1 %>% dplyr::rename(
@@ -92,7 +93,6 @@ d3 <- d2 %>% rename(
   min.temp = `Min Temp`,
   rel.humid = `R.H (%)`,
   temp = `TEMP ©`,
-  salt = SALT,
   wind.speed = `Wind Speed (mph)`,
   turbidity = TURBIDITY,
   width = WIDTH,
@@ -189,6 +189,7 @@ d7 <- d7 %>% mutate(complexity = sum(c_across(Anat:MuenII) >0, na.rm=TRUE))
 ## ---- joindata --------
 #It will be helpful if these two data sets can go in one sheet
 d8 <- merge(d3, d7, by = "Day")
+d8$Day <- as.integer(d8$Day)
 
 ## ---- savedata --------
 processed_enviro_data <- d3
