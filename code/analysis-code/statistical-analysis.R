@@ -83,3 +83,5 @@ lm_fit <- linear_reg() %>% set_engine("glm") %>%
   fit(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg,
   data = mydata)
 tidy(lm_fit)
+#This is interesting but far from perfect
+#Should maybe run a random forest whatever to select variables for use
