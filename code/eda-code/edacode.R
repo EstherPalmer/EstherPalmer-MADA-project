@@ -79,4 +79,4 @@ plot17
 plot18 <- mydata %>% ggplot(aes(x=Weekday, y=complexity)) + geom_boxplot()
 plot18
 #These are not in order but I just kinda wanted to see what these looked like
-
+#To me this says there is no weekly scheduled salmonella dumping in the water

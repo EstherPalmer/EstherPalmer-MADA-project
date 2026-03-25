@@ -12,6 +12,7 @@ library(tidymodels) #for modeling
 library(randomForest) #for randomforest modeling
 library(caret) #modeling
 library(ranger) #random forest modeling but different
+library(corrplot) #to make a correlation plot of my variables
 
 #path to data
 #note the use of the here() package and not absolute paths
@@ -61,6 +62,11 @@ cor_matrix
 #This I think ignores NA's
 #This makes a matrix of correlations rounded to 3 digits!
 #No idea what is signifigant tho or how to turn this into a pretty figure
+#the default is the pearson correlation which is used for quantitative continuous variables with a linear relationship
+#I'd say that applies here
+
+cor_plot1 <- corrplot::corrplot(cor(df1, use = "complete.obs"), method = "number", type = "upper")
+cor_plot1
 
 #In other models I have had many hours long meetings discussing we used .75 as a cutoff for correlation
 #I think I may stick to that here
@@ -72,6 +78,8 @@ df2 <- df1 %>% select(-max.temp, -min.temp, -twoinST, -fourinST, -eightinST)
 
 cor_matrix2 <- round(cor(df2, use = "complete.obs"), digits = 3)
 cor_matrix2
+cor_plot2 <- corrplot::corrplot(cor(df2, use = "complete.obs"), method = "number", type = "upper")
+cor_plot2
 #This is much easier to read and could be turned into a figure
 
 #I will need to remove: cond or TDS, radiation or ET
@@ -82,16 +90,20 @@ table_file1 = here("results", "tables", "resulttable1.rds")
 saveRDS(cor_matrix2, file = table_file1)
 #I think this saves it as a table
 
-df3 <- mydata %>% select(-ET, -COND, -Day, -Date, - Weekday, -max.temp, -min.temp, -twoinST, -fourinST, -eightinST)
-df3 <- df3 %>% select(-Anat, -AquaInve, -BrazI, -Brae, -Infa, -MontII, -MuenI, -Mues, -Rubi, -Typm, -Gamn, -GiveI, 
+df3 <- df2 %>% select(-ET, -COND)
+cor_plot3 <- corrplot::corrplot(cor(df3, use = "complete.obs"), method = "number", type = "upper")
+cor_plot3
+
+df4 <- mydata %>% select(-ET, -COND, -Day, -Date, - Weekday, -max.temp, -min.temp, -twoinST, -fourinST, -eightinST)
+df4 <- df4 %>% select(-Anat, -AquaInve, -BrazI, -Brae, -Infa, -MontII, -MuenI, -Mues, -Rubi, -Typm, -Gamn, -GiveI, 
   -NewpII, -MissII, -MontI, -Hart, -Agbe, -Hada, -Mine, -Oran, -Saitll, -KisrI, -MbanI, -Luci, -BertBuda, -MuenII)
 #note to self: rename saintpaul later so there's II instead of ll
 
-df3$complexity <- as.integer(df3$complexity)
+df4$complexity <- as.integer(df4$complexity)
 set.seed(222)
-ind <- sample(2, nrow(df3), replace = TRUE, prob = c(.8, .2))
-train <- df3[ind==1,]
-test <- df3[ind==2,]
+ind <- sample(2, nrow(df4), replace = TRUE, prob = c(.8, .2))
+train <- df4[ind==1,]
+test <- df4[ind==2,]
 #So from what I can tell, I assigned 80% of the data to train, and 20% to test
 
 lm_fit <- linear_reg() %>% set_engine("glm") %>%
