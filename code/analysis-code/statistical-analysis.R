@@ -18,9 +18,11 @@ library(corrplot) #to make a correlation plot of my variables
 #note the use of the here() package and not absolute paths
 data_location1 <- here::here("data","processed-data","processed_merged_data.rds")
 data_location2 <- here::here("data","processed-data","processed_enviro_data.rds")
+data_location3 <- here::here("data","processed-data","processed_CSS_data.rds")
 #load data. 
 mydata <- readRDS(data_location1)
 envirodata <- readRDS(data_location2)
+CSSdata <- readRDS(data_location3)
 
 
 ######################################
@@ -175,3 +177,15 @@ rf_test_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
 #### Serovar correlation
 
 #I would like to know if the presense of any serovar correlates with each other
+df5 <- CSSdata %>% select(-complexity)
+df6 <- df5 %>% ungroup() %>% select(-Day)
+#creating a data frame of only serovar data so that I can use it in a corrplot
+cor_matrix3 <- round(cor(df6, use = "complete.obs"), digits = 3)
+cor_matrix3
+
+cor_plot4 <- corrplot::corrplot(cor(df6, use = "complete.obs"), method = "number", type = "upper")
+cor_plot4
+#I think it looks like the only real correlations seen are between serovars that do not occur frequently
+#I will count the top 10 serovars and create a new corrplot
+
+# df7 <- colSums(df6[c("Anat", "AquaInve")] >0)
