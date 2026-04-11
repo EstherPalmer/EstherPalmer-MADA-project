@@ -24,7 +24,7 @@ library(knitr)
 
 **Authors**  
 
-* Esther Palmer$^{1}$ (ORCID: 0000-0000-1234-5678) 
+* Esther Palmer$^{1}$ (ORCID: ) 
 * Dawson Deal$^{1}$
 * Kaya Palukaitis$^{1}$
 * Elisabeth Drake$^{2}$ 
@@ -51,27 +51,23 @@ I (Esther) will be the only one doing modeling on this project, however I do wan
 
 
 # Summary/Abstract
-_Write a summary of your project._
-
-_It is recommended to use a structured abstract with Background/Methods/Results/Discussion sections._
-
-{{< pagebreak >}}
 
 
 # Introduction 
 
 ## General Background Information
-_Provide enough background on your topic that others can understand the why and how of your analysis_
 _Salmonella_ is an enteric bacteria responsible for over 1 million illnesses/year in the US. Nearly half of those ilnesses come from fresh produce (cite IFSAC report which hasn't been updated for most recent year due to stupid politics). One of the main ways produce can become contaminated with _Salmonella_ is due to the use of contaminated irrigation water. As such it is important to study the dynamics of _Salmonella_ populations in water.
-_Salmonella_ is an incredibly diverse organism with over 2600 serovars (cite kaufmann white scheme). These different serovars pose different risks to human and agricultural health. (insert statistic about how like only 100 of those 2600 serovars really cause human illness). As such it is important to study _Salmonella_ on a serovar level.
+_Salmonella_ is an incredibly diverse organism with over 2600 serovars (cite kaufmann white scheme). _Salmonella_ serovars are differentiated by their O and H antigens. Different serovars pose different risks to human and agricultural health. For example, serovar Typhi is the causitive agent of typhoid fever and is host restricted to humans. Meanwhile serovar Typhimurium is host promiscuous and can be found in a wide range of animals. (insert statistic about how like only 100 of those 2600 serovars really cause human illness). As such it is important to study _Salmonella_ populations on a serovar level.
 
 It has been well established that _Salmonella_ can be found in surface water such as creeks/rivers/ponds/lakes (Insert literally all the refs), and that such samples typically contain high diversity of Serovars (Deavon 2021, Smith/Siceloff 2025, My CC paper if I can ever get it out the door). However, much is unknown about the daily population dynamics of these serovars over time.
 
+Many studies have attempted to create models to predict _Salmonella_ prevalence using various weather and environmental variables. However many of these studies have demonstrated contradictory results. Some find factors like precipitation to be positivly correlated with prevalence while other found no relation or even negative relationships with these same variables. It is looking increasingly like any model is good only for that system and cannot be generalizable to other systems.
 The purpose of this study is to figure out what _Salmonella_ does on a daily basis. Are populations stable? Do we see lots of changes? How long does a given serovar stay in the creek? The purpose of this project for this class is to look at how environmental and weather variables affect _Salmonella_ serovars in the creek.
+
 
 ## Description of data and data source
 _Describe what the data is, what it contains, where it is from, etc. Eventually this might be part of a methods section._
-We went sampling for _Salmonella_ at an urban creek every weekday for 6 months (179 days from start, ~150 days total not including weekends), and then once a week for another 9 months or so. I will probably focus my analysis on only that 6 month period. Prevalence of _Salmonella_ was ~96% (will double check # later). 
+We went sampling for _Salmonella_ at an urban creek every weekday for 6 months (179 days from start, ~150 days total not including weekends), and then once a week for another 9 months or so. Prevalence of _Salmonella_ was ~96% during the daily sampling (will double check # later). 
 We also collected environmental data (pH turbidity conductivity flow depth etc.) as well as weather data from the nearest UGA weather station (insert link).
 Overall I believe that there are 22 environmental variables I have data for (not including date). Many of them will be correlated and some can be dropped. For example, salinity while collected has only ever been not 0 once in all my years of collecting it.
 I have not cleaned or really ever checked the weather data, however any missing data can be obtained by emailing the weather people because they keep records of all this.
@@ -86,34 +82,11 @@ I can instead attempt to see if environmental/weather data affects _Salmonlla_ c
 I also would like to see if environmental/weather variables affect the prevalence of specific _Salmonella_ serovars. (For example, are we more likely to find Muenchen on hot days, or Anatum after rain). Other papers have not been able to consider serovar level data when looking at effects of weather/environmental data. I have preliminary data from my other projects that do suggest that things like rain might affect some serovars more than others.
 One thing that may make things more complicated or may help is that I do have all the values from every day, so I can ask things like whether the weather the day before or day of sampling is more important. So maybe rain the day before sampling has more of an impact than rain the day of sampling.
 
-To cite other work (important everywhere, but likely happens first in introduction), make sure your references are in the BibTeX file specified in the YAML header above and have the right BibTeX key. Then you can include like this:
-
-Examples of reproducible research projects can for instance be found in [@mckay2020; @mckay2020a].
-
-
-
-{{< pagebreak >}}
-
 
 # Methods 
 
-_Describe your methods. That should describe the data, the cleaning processes, and the analysis approaches. You might want to provide a shorter description here and all the details in the supplement._
-
 
 ## Schematic of workflow
-
-Sometimes you might want to show a schematic diagram/figure that was not created with code (if you can do it with code, do it). @fig-schematic is an example of some - completely random/unrelated - schematic that was generated with BioRender.
-We store those figures in the `assets` folder.
-
-```{r}
-#| label: fig-schematic
-#| fig-cap: "A figure that is manually generated and shows some overview/schematic. This has nothing to do with the data, it's just a random one from one of our projects I found and placed here."
-#| echo: FALSE
-knitr::include_graphics(here("assets","antigen-recognition.png"))
-```
-
-
-
 
 ## Data acquisition
 _As applicable, explain where and how you got the data. If you directly import the data from an online source, you can combine this section with the next._
@@ -164,54 +137,14 @@ _Explain anything related to your statistical analyses._
 
 ## Exploratory/Descriptive analysis
 
-_Use a combination of text/tables/figures to explore and describe your data. Show the most important descriptive results here. Additional ones should go in the supplement. Even more can be in the R and Quarto files that are part of your project._
-
-
-@tbl-summarytable shows a summary of the data.
-
-Note the loading of the data providing a **relative** path using the `../../` notation. (Two dots means a folder up). You never want to specify an **absolute** path like `C:\ahandel\myproject\results\` because if you share this with someone, it won't work for them since they don't have that path. You can also use the `here` R package to create paths. See examples of that below. I generally recommend the `here` package.
-
-```{r}
-#| label: tbl-summarytable
-#| tbl-cap: "Data summary table."
-#| echo: FALSE
-resulttable <- readRDS("../../results/tables/summarytable.rds")
-knitr::kable(resulttable)
-```
-
-
+_
 
 ## Basic statistical analysis
 
-_To get some further insight into your data, if reasonable you could compute simple statistics (e.g. simple models with 1 predictor) to look for associations between your outcome(s) and each individual predictor variable. Though note that unless you pre-specified the outcome and main exposure, any "p<0.05 means statistical significance" interpretation is not valid._
-
-
-@fig-result shows a scatterplot figure produced by one of the R scripts.
-
-```{r}
-#| label: fig-result
-#| fig-cap: "Height and weight stratified by gender."
-#| echo: FALSE
-knitr::include_graphics(here("results","figures","height-weight-stratified.png"))
-```
 
 
 ## Full analysis
 
-_Use one or several suitable statistical/machine learning methods to analyze your data and to produce meaningful figures, tables, etc. This might again be code that is best placed in one or several separate R scripts that need to be well documented. You want the code to produce figures and data ready for display as tables, and save those. Then you load them here._
-
-Example @tbl-resulttable2 shows a summary of a linear model fit.
-
-```{r}
-#| label: tbl-resulttable2
-#| tbl-cap: "Linear model fit table."
-#| echo: FALSE
-resulttable2 <- readRDS(here("results","tables","resulttable2.rds"))
-knitr::kable(resulttable2)
-```
-
-
-{{< pagebreak >}}
 
 
 # Discussion
@@ -227,14 +160,7 @@ _What are the main take-home messages?_
 
 _Include citations in your Qmd file using BibTeX, the list of references will automatically be placed at the end_
 
-This paper [@leek2015] discusses types of analyses. 
 
-These papers [@mckay2020; @mckay2020a] are good examples of papers published using a fully reproducible setup similar to the one shown in this template. 
-
-Note that this cited reference will show up at the end of the document, the reference formatting is determined by the CSL file specified in the YAML header. Many more style files for almost any journal [are available](https://www.zotero.org/styles). You also specify the location of your BibTeX reference file in the YAML. You can call your reference file anything you like.
-
-
-{{< pagebreak >}}
 
 # References
 
