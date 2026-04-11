@@ -127,8 +127,8 @@ summary(enviro_rawdata)
 This provides a look at all the environmental data. I can see several variables have been listed as characters when they need to be numeric, and there are several NAs so I will have some cleaning to do in the future. I also don't trust DO I think the instrument was acting up so I kinda want to drop the whole variable. Day is also being treated like a numeric variable rather than an ordinal (I think ordinal? it has order) variable. Although maybe it is quantitative since you can do things like addition to it?
 
 ## Statistical analysis
-_Explain anything related to your statistical analyses._
 
+I plan to train my models on the data collected from this site daily for 6 months, then test it on data collected from the same site weekly for another 9? months.
 
 {{< pagebreak >}}
 

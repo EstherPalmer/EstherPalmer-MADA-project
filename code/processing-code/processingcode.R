@@ -25,6 +25,7 @@ library(janitor) #for naming columns as rows
 #note the use of the here() package and not absolute paths
 enviro_data_location <- here::here("data","raw-data","Environmental_Data_Final.xlsx")
 CSS_data_location <- here::here("data", "raw-data", "Daily_Sampling_Normalized_CSS_6mo.xlsx")
+weekly_data_location <- here::here("data", "raw-data", "Weekly_CSS_and_Environmental_Data.xlsx")
 #load data. 
 #note that for functions that come from specific packages (instead of base R)
 # I often specify both package and function like so
@@ -35,9 +36,10 @@ enviro_rawdata <- readxl::read_excel(enviro_data_location, sheet = "Sheet2")
 #I am going to use the dataset that excludes weekends for this preliminary look, Sheet1 contains the data that has weekends
 CSS_rawdata <- readxl::read_excel(CSS_data_location, col_names = FALSE)
 #This will read in the CSS data
-# We might also want to load the codebook to look at it
-#codebook <- readxl::read_excel(data_location, sheet ="Codebook")
-#I don't have a codebook so I will leave it out for now
+weekly_weather_rawdata <- readxl::read_excel(weekly_data_location, sheet = "Weather")
+weekly_CSS_rawdata <- readxl::read_excel(weekly_data_location, sheet = "CSS")
+#My undergrads did not put it all in one sheet for me :/
+#As such I will load each sheet separately and merge later
 
 ## ---- exploredata --------
 #take a look at the data
@@ -191,6 +193,53 @@ d7 <- d7 %>% mutate(complexity = sum(c_across(Anat:MuenII) >0, na.rm=TRUE))
 #It will be helpful if these two data sets can go in one sheet
 d8 <- merge(d3, d7, by = "Day")
 d8$Day <- as.integer(d8$Day)
+
+
+## ---- weeklydata --------
+#So I want to train my models on the daily sampling data and test them on the weekly sampling data.
+#Here I will clean my weekly sampling data in the same way I did the daily
+#Looks like I need to transpose the CSS data and clean up some of the extra stuff
+#For the weather I will need to clean up all the other variables the same
+d9 <- select(weekly_weather_rawdata, -DO, -SALT)
+d9 <- d9 %>% rename(
+  flow1 = FLOW...9,
+  flow2 = FLOW...10,
+  flow3 = FLOW...11,
+  depth = `DEPTH (cm)`,
+  max.temp = `Max Temp`,
+  min.temp = `Min Temp`,
+  rel.humid = `R.H (%)`,
+  temp = `TEMP ©`,
+  wind.speed = `Wind Speed (mph)`,
+  turbidity = TURBIDITY,
+  width = WIDTH,
+  twoinST = `2 Inch Soil Temp`,
+  fourinST = `4 Inch Soil Temp`,
+  eightinST = `8 Inch Soil Temp`,
+  radiation = `Total Radiation (MJ/m2)`,
+  rain = `Rain (in)`,
+  ET = `ET (in)`
+)
+#rename columns, so it's easier to deal with them
+flow_avg2 <- subset(d9, select = c(flow1, flow2, flow3))
+#creates a dataframe with just the 3 flow variables
+#this is a much nicer method than my first attempts bc it keeps the variable names!
+d9$flow_avg <- rowMeans(flow_avg2)
+#this creates a variable in d1 that is the average of all the flow measurements (we took 3)
+d10 <- select(d9, -flow1, -flow2, -flow3, -`Average Flow`)
+#now that we have the average we don't need the individual flow measurements
+d10 <- d10 %>% select(-Complexity...26, -Complexity...2)
+#This is complexity calculated from the CSS data, but I think it's better to remove it and recalculate it
+#need to rename column 1 to Day, and change it from a number to whatever I made it in the other data sets
+d10 <- d10 %>% rename(
+  Day = '...1'
+)
+d10$Day <- as.character(d10$Day)
+#still need to fix width
+#there is one depth that is in inches
+#windspeed is a string currently
+
+
 
 ## ---- savedata --------
 processed_enviro_data <- d3
