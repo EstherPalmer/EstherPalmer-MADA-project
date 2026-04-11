@@ -195,8 +195,9 @@ d8 <- merge(d3, d7, by = "Day")
 d8$Day <- as.integer(d8$Day)
 
 
-## ---- weeklydata --------
+## ---- weeklydataweather --------
 #So I want to train my models on the daily sampling data and test them on the weekly sampling data.
+#note that I have more weekly CSS that still needs processing and will be added later
 #Here I will clean my weekly sampling data in the same way I did the daily
 #Looks like I need to transpose the CSS data and clean up some of the extra stuff
 #For the weather I will need to clean up all the other variables the same
@@ -239,6 +240,30 @@ d10$Day <- as.character(d10$Day)
 #there is one depth that is in inches
 #windspeed is a string currently
 
+wd1 <- subset(d10, select = c(width))
+wd2 <- wd1 %>% separate(width, c('feet', 'inches'), "'", convert = TRUE)
+#this separates feet and inches into separate columns
+wd2$inches <- gsub('"', '', wd2$inches)
+#this removes the " on inches
+wd2$inches <- as.numeric(wd2$inches)
+wd2$inches[is.na(wd2$inches)] <- 0
+#makes inches numeric, replaces NA with 0
+wd3 <- wd2%>% mutate(cm = (12*feet + inches)*2.54)
+#creates a df with a column for cm
+d10$width <- wd3$cm
+#replaces the column in the whole dataframe with the one in cm from w3
+
+d10$depth <- as.numeric(d10$depth)
+d10[13, 6] = 1.2*2.54
+#this still doesn't look right I have texted undergrads to confirm that they measured 1.2 inches
+#either that or it could be 1.2 feet, or 1 foot 2 in
+#will leave for now
+
+d10$wind.speed <- as.numeric(d10$wind.speed)
+
+#Now this all looks good!
+
+## ---- weeklydataCSS --------
 
 
 ## ---- savedata --------
