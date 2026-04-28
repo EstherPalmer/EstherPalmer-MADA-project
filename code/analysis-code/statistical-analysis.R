@@ -99,39 +99,81 @@ cor_plot3
 df4 <- mydata %>% select(-ET, -COND, -Day, -Date, - Weekday, -max.temp, -min.temp, -twoinST, -fourinST, -eightinST)
 df4 <- df4 %>% select(-Anat, -AquaInve, -BrazI, -Brae, -Infa, -MontII, -MuenI, -Mues, -Rubi, -Typm, -Gamn, -GiveI, 
   -NewpII, -MissII, -MontI, -Hart, -Agbe, -Hada, -Mine, -Oran, -SaitII, -KisrI, -MbanI, -Luci, -BertBuda, -MuenII)
-#note to self: rename saintpaul later so there's II instead of ll
 
 df4$complexity <- as.integer(df4$complexity)
-set.seed(222)
-ind <- sample(2, nrow(df4), replace = TRUE, prob = c(.8, .2))
-train <- df4[ind==1,]
-test <- df4[ind==2,]
-#So from what I can tell, I assigned 80% of the data to train, and 20% to test
 
-lm_fit <- linear_reg() %>% set_engine("glm") %>%
-  fit(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg,
-  data = train)
-tidy(lm_fit)
-#This is interesting but far from perfect
-#Should maybe run a random forest whatever to select variables for use
-#This also doesn't show a good relationship between temp and complexity despite my dotplots showing one
-lm_train_pred <- predict(lm_fit, train) %>% 
-  bind_cols(train %>% select(complexity))
+rngseed <- 1234
+set.seed(rngseed)
+
+train <- df4
+test <- df5
+#I will train on the daily, test on the weekly
+
+lm_mod <- linear_reg()
+
+folds <- vfold_cv(train, v = 10)
+folds
+
+#This is the full model with all predictors, I will also test models with various combinations of predictors
+lm_wf1 <- workflow() %>% add_model(lm_mod) %>% 
+  add_formula(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg)
+
+lm_fit1 <- lm_wf1 %>% fit(train)
+tidy(lm_fit1)
+lm_train_pred1 <- predict(lm_fit1, train) %>% bind_cols(train %>% select(complexity))
 
 lm_train_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
 
-lm_test_pred <- predict(lm_fit, test) %>% 
-  bind_cols(test %>% select(complexity))
+lm_fit_cv1 <- lm_wf1 %>% 
+  fit_resamples(folds, control = control_resamples(save_pred = TRUE, save_workflow = TRUE, extract = I))
+lm_fit_cv1
+collect_metrics(lm_fit_cv1)
 
-lm_test_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
-#better rmse on the test than the training which is interesting
+lm_pred1 <- collect_predictions(lm_fit_cv1)
 
-#ok so for now I will need to split into test and training data
-#I do actually have a second dataset that I can use from this same site with all the same variables just sampling weekly instead of daily
-#and I plan to use that second data set to train my model
-#however I don't know where exactly that is and I don't want to go searching I also don't know if it's fully finished
-#will ask undergrads later
-#so for now split into training and test data, redo better later
+lm_p1 <- lm_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point()
+lm_p1
+
+#removing rel.humid
+lm_wf2 <- workflow() %>% add_model(lm_mod) %>% 
+  add_formula(complexity ~ TDS + pH + temp + depth + width + wind.speed + radiation + rain + turbidity + flow_avg)
+lm_fit_cv2 <- lm_wf2 %>% fit_resamples(folds, control = control_resamples(save_pred = TRUE, save_workflow = TRUE))
+lm_fit_cv2
+collect_metrics(lm_fit_cv2)
+
+
+lm_pred2 <- collect_predictions(lm_fit_cv2)
+
+lm_p2 <- lm_pred2 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point()
+lm_p2
+#This has a lower rmse
+
+#removing rel.humid and radiation
+lm_wf3 <- workflow() %>% add_model(lm_mod) %>% 
+  add_formula(complexity ~ TDS + pH + temp + depth + width + wind.speed + rain + turbidity + flow_avg)
+lm_fit_cv3 <- lm_wf3 %>% fit_resamples(folds, control = control_resamples(save_pred = TRUE))
+lm_fit_cv3
+collect_metrics(lm_fit_cv3)
+
+lm_pred3 <- collect_predictions(lm_fit_cv3)
+
+lm_p3 <- lm_pred3 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point()
+lm_p3
+
+
+
+#Temp + radiation
+lm_wf4 <- workflow() %>% add_model(lm_mod) %>% 
+  add_formula(complexity ~ temp + flow_avg)
+lm_fit_cv4 <- lm_wf3 %>% fit_resamples(folds, control = control_resamples(save_pred = TRUE))
+lm_fit_cv4
+collect_metrics(lm_fit_cv4)
+
+lm_pred4 <- collect_predictions(lm_fit_cv4)
+
+lm_p4 <- lm_pred4 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point()
+lm_p4
+
 
 ############################
 #### Random Forest attempt
@@ -189,3 +231,35 @@ cor_plot4
 #I will count the top 10 serovars and create a new corrplot
 
 # df7 <- colSums(df6[c("Anat", "AquaInve")] >0)
+
+
+#set.seed(222)
+#ind <- sample(2, nrow(df4), replace = TRUE, prob = c(.8, .2))
+#train <- df4[ind==1,]
+#test <- df4[ind==2,]
+#So from what I can tell, I assigned 80% of the data to train, and 20% to test
+
+#lm_fit <- linear_reg() %>% set_engine("glm") %>%
+#  fit(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg,
+#  data = train)
+#tidy(lm_fit)
+#This is interesting but far from perfect
+#Should maybe run a random forest whatever to select variables for use
+#This also doesn't show a good relationship between temp and complexity despite my dotplots showing one
+#lm_train_pred <- predict(lm_fit, train) %>% 
+#  bind_cols(train %>% select(complexity))
+
+#lm_train_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
+
+#lm_test_pred <- predict(lm_fit, test) %>% 
+#  bind_cols(test %>% select(complexity))
+
+#lm_test_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
+#better rmse on the test than the training which is interesting
+
+#ok so for now I will need to split into test and training data
+#I do actually have a second dataset that I can use from this same site with all the same variables just sampling weekly instead of daily
+#and I plan to use that second data set to train my model
+#however I don't know where exactly that is and I don't want to go searching I also don't know if it's fully finished
+#will ask undergrads later
+#so for now split into training and test data, redo better later
