@@ -117,7 +117,6 @@ folds
 #This is the full model with all predictors, I will also test models with various combinations of predictors
 lm_wf1 <- workflow() %>% add_model(lm_mod) %>% 
   add_formula(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg)
-
 lm_fit1 <- lm_wf1 %>% fit(train)
 tidy(lm_fit1)
 lm_train_pred1 <- predict(lm_fit1, train) %>% bind_cols(train %>% select(complexity))
