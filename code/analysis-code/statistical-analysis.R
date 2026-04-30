@@ -324,6 +324,8 @@ cor_plot4
 
 # df7 <- colSums(df6[c("Anat", "AquaInve")] >0)
 
+df7 <- df6 
+
 
 #set.seed(222)
 #ind <- sample(2, nrow(df4), replace = TRUE, prob = c(.8, .2))
