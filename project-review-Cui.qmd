@@ -1,0 +1,157 @@
+---
+title: Project Review - Salmonella Serovar Complexity in an Urban Creek
+author: Kexin (Cassie) Cui
+date: today
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+# Overview
+
+Title of project: Modeling _Salmonella_ serovar complexity using environmental and weather variables in an urban creek
+
+Name of project author(s): Esther Palmer
+
+Name of project reviewer: kexin (Cassie) Cui
+
+
+# Specific project content evaluation
+
+## Background, Context and Motivation
+
+### Feedback and Comments
+
+The introduction does a nice job framing why studying _Salmonella_ at the serovar level matters, and the point that complexity (number of serovars per sample) is something previous studies haven't really addressed is a strong motivation for the project. The writing reads well and shows you really know this system. The main weakness is that almost all of the references are placeholders (e.g. "cite IFSAC report", "Insert literally all the refs", "insert statistic"), so right now it's hard to tell how the work fits into the existing literature. Filling in the BibTeX file and adding actual citations would make the contextualization much stronger. A short paragraph explicitly stating the gap your project fills (instead of just describing prior contradictory results) would also help.
+
+### Summary assessment
+
+* some contextualization and motivation
+
+
+## Question description
+
+### Feedback and Comments
+
+The questions are stated clearly: (1) does environmental/weather data predict serovar complexity, and (2) do environmental variables affect specific serovar prevalence. The connection to the data is intuitive given the daily sampling design. One thing that could be tightened up is committing to a primary question vs. secondary questions, since the second one (serovar-specific effects) doesn't really show up in the analysis code yet. Also, it would help to phrase these as testable hypotheses rather than open-ended exploratory questions.
+
+### Summary assessment
+
+* question/hypotheses somewhat explained
+
+
+## Data description
+
+### Feedback and Comments
+
+The manuscript describes the data sources reasonably well: daily creek sampling for 6 months, weekly for ~9 months, environmental variables, weather from the UGA station, and CSS for serovar data. The README in raw-data also helps. What's missing is a proper codebook listing each variable, its units, and what the abbreviations mean (e.g., TDS, ET, the soil temperature variables, all the serovar abbreviations). Right now you have to read the processing code to figure out what columns exist. Adding even a simple table of variables and definitions in the supplement would make this much more accessible to someone outside your lab.
+
+### Summary assessment
+
+* source and overall structure of data somewhat explained
+
+
+## Data wrangling and exploratory analysis
+
+### Feedback and Comments
+
+The processing script is actually one of the strongest parts of the project. The cleaning steps are logical, the comments explain what each chunk is doing and why (e.g., dropping DO because the instrument was acting up, averaging the three flow measurements, the feet/inches to cm conversion for width), and the chunk labels make it easy to follow. The merge of CSS and environmental data into one dataframe is handled well.
+
+The EDA code is a bit thin though. It's basically a long series of `ggplot()` calls printed to the screen with comments like "this looks correlated!", but none of the plots are saved with `ggsave()` to the results/figures folder, so a reader can't actually see what you're describing without re-running the code. The figures that are in `results/figures` (height-distribution.png, etc.) look like leftover template files from the original repo, not your own EDA output. A summary table of variables and a few cleaned-up exploratory figures saved to file would make this section much stronger.
+
+### Summary assessment
+
+* some weaknesses in wrangling and exploratory component
+
+
+## Appropriateness of Analysis
+
+### Feedback and Comments
+
+The general approach (correlation matrix to drop redundant predictors, then a series of linear models with cross-validation, plus a random forest comparison) is reasonable and matches what we did in class. The .75 correlation cutoff and the reasoning for dropping ET and conductivity are explained, which is good.
+
+That said, there are a few real issues in the analysis script. First, `test <- df5` appears before `df5` is defined (df5 only gets created later in the serovar correlation section, and from a different dataset entirely), so this will error out as written. The plan in the manuscript says you'll train on the daily data and test on the weekly data, but the weekly test set is never actually constructed in this script. Second, the variable selection is done by manually removing one variable at a time across eight workflows; this works but a recipe with `step_corr()` or a LASSO/elastic-net would be a more defensible (and shorter) approach. Third, the random forest section has undefined objects (`rf_train_pred`, `rf_fit`, `test`) so it doesn't actually run end to end. Finally, no metrics or models are saved to `results/`, so even when the script does run it doesn't produce reproducible output for the manuscript to pull in.
+
+### Summary assessment
+
+* defensible but not optimal analysis
+
+
+## Presentation
+
+### Feedback and Comments
+
+This is the section that needs the most work. The Manuscript.qmd still has the template title ("Example Manuscript Template..."), no abstract, no filled-in results, and the Discussion is entirely placeholder italics. The figures from the EDA (Rain.png, Temp and complexity.png, etc.) live inside `code/eda-code/` and `code/analysis-code/` instead of `results/figures/`, and they're not pulled into the manuscript. The tables saved in `results/tables/` (resulttable1, resulttable2, summarytable) aren't referenced either. So as it stands the manuscript doesn't really present any of the work. Once the figures are saved to the right place and rendered with captions in the manuscript, this will improve a lot.
+
+### Summary assessment
+
+* results are poorly presented, hard to understand, poor quality
+
+
+## Discussion/Conclusions
+
+### Feedback and Comments
+
+The Discussion, Strengths/Limitations, and Conclusions sections are all empty placeholders right now, so there's nothing to evaluate. When you fill these in, it would be worth specifically discussing the limitations of using a single site, the relatively short daily-sampling window, and the fact that complexity as an outcome is a count that might be better handled with a Poisson/negative binomial model rather than linear regression.
+
+### Summary assessment
+
+* major parts of discussion missing or wrong
+
+
+## Further comments
+
+The biological framing is a real strength here, you clearly understand the system better than most readers will, so leaning into that in the Discussion will pay off. I'd prioritize: (1) actually running the full analysis end-to-end and saving outputs, (2) writing the results and discussion text, and (3) cleaning up references. The modeling itself is mostly there, it just needs to be tied together and actually presented.
+
+
+# Overall project content evaluation
+
+## Structure
+
+### Feedback and Comments
+
+The folder structure follows the MADA template well, with code split into processing/eda/analysis and data split into raw/processed. A few small things: filenames mix conventions (e.g. `Manuscript.qmd`, `Kept variables.png`, `Serovars.png` use capitals and spaces, while the convention in the repo is lowercase-with-dashes). The PNG figures in `code/analysis-code/` and `code/eda-code/` should really live under `results/figures/` since they're outputs, not code. There are also some leftover template figures (height-distribution.png, etc.) and template tables in `results/` that should be removed since they're not from this project.
+
+### Summary assessment
+
+* mostly clear, but some confusing parts (e.g. useless files, things in the wrong folders)
+
+
+## Documentation
+
+### Feedback and Comments
+
+The processing code is well-commented and easy to follow, and the personal voice in the comments actually makes it easier to understand the decisions you made. The analysis script is also commented but the comments are more "talking to yourself" than explaining the analysis to a reader (e.g. "removing rel.humid, radiation, depth"), which is fine for a working script but should be tightened up before submission. The manuscript itself is the weakest documentation right now since most sections are placeholders.
+
+### Summary assessment
+
+* decently documented with some gaps
+
+
+## Reproducibility
+
+### Feedback and Comments
+
+I tried to mentally walk through the analysis script and it would not run end to end because of the `test <- df5` ordering issue and the undefined objects in the random forest block. The processing script looks like it would run cleanly. There's no master script (e.g., a `run-everything.R` or a renv lockfile) to tell a reviewer the exact order things should be run in, and the manuscript doesn't pull in computed results, so right now the project isn't fully reproducible without manual fixes.
+
+### Summary assessment
+
+* small parts not reproducible or required manual intervention
+
+
+## Thoroughness
+
+### Feedback and Comments
+
+You explored a lot of variables and tried several models (eight linear models plus a random forest), which shows you're thinking carefully about variable selection. The weekly-vs-daily train/test split idea is creative and appropriate. Where it falls short of "thorough" is that the second research question about serovar-specific effects isn't really addressed in the modeling, and the random forest is started but not finished. Also, given that complexity is a count outcome, it would be worth at least mentioning whether a Poisson or LASSO/elastic-net model was considered.
+
+### Summary assessment
+
+* decent level of thoroughness
+
+
+## Further comments
+
+Overall I think the project has good bones, the dataset is interesting, the question is novel, and the processing pipeline is solid. The biggest lift between now and a polished final product is just connecting the pieces: save figures and tables to `results/`, fix the broken parts of the analysis script, and actually write the manuscript text. Don't worry too much about adding new methods, what you have is mostly enough if you tighten it up and present it properly.
