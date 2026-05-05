@@ -88,7 +88,9 @@ plot18
 ## ---- Histogram and Area Plot -------
 
 #histogram showing how many samples have each number of serovars in them
-complexhist <- CSSdata %>% ggplot(aes(x=complexity)) + geom_histogram()
+complexhist <- CSSdata %>% ggplot(aes(x=complexity)) + geom_histogram() + theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank()) +
+  scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0))
 complexhist
 
 #I want to make an area plot of all the serovars over time, first though I want a df that has complexity removed
@@ -126,5 +128,6 @@ area
 
 save_location <- here::here("data", "processed-data", "Figures")
 ggsave("areaplot.jpeg", plot = area, path = save_location , width = 10, height = 4.5)
+ggsave("complexity_histogram.jpeg", plot = complexhist, path = save_location, width = 5, height = 3)
 
 #ggsave for saving area plot
