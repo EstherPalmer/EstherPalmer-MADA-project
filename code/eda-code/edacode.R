@@ -4,12 +4,15 @@ library(here) #for data loading/saving
 library(dplyr)
 library(skimr)
 library(ggplot2)
+library(tidyr)
 
 ## ---- loaddata --------
 #Path to data. Note the use of the here() package and not absolute paths
 data_location <- here::here("data","processed-data","processed_merged_data.rds")
+data_location2 <- here::here("data","processed-data","processed_CSS_data.rds")
 #load data
 mydata <- readRDS(data_location)
+CSSdata <- readRDS(data_location2)
 
 ## ---- ComplexityByTime -------
 plot1 <- mydata %>% ggplot(aes(x=Day, y=complexity)) + geom_point()
@@ -80,3 +83,48 @@ plot18 <- mydata %>% ggplot(aes(x=Weekday, y=complexity)) + geom_boxplot()
 plot18
 #These are not in order but I just kinda wanted to see what these looked like
 #To me this says there is no weekly scheduled salmonella dumping in the water
+
+
+## ---- Histogram and Area Plot -------
+
+#histogram showing how many samples have each number of serovars in them
+complexhist <- CSSdata %>% ggplot(aes(x=complexity)) + geom_histogram()
+complexhist
+
+#I want to make an area plot of all the serovars over time, first though I want a df that has complexity removed
+#Then I want to convert it to long(?) format so I can turn it into an area plot
+#I also want to make an other serovar category for the area plot bc it can get to be alot when theres 26 different serovars
+df2 <- CSSdata %>% select(-complexity)
+df2$Other <- df2$Anat + df2$AquaInve + df2$Infa + df2$Gamn + df2$MontI + df2$Mine + df2$SaitII + df2$KisrI + df2$Luci + df2$BertBuda + df2$MuenII + df2$MbanI + df2$Hada + df2$MissII
+df2 <- df2 %>% select(-Anat, -AquaInve, -Infa, -Gamn, -MontI, -Mine, - SaitII, -KisrI, -Luci, -BertBuda, -MuenII, -MbanI, -Hada, - MissII)
+df2$check <- df2$BrazI + df2$Brae + df2$MontII + df2$MuenI + df2$Mues + df2$Rubi + df2$Typm + df2$GiveI + df2$NewpII + df2$Hart + df2$Agbe + df2$Oran + df2$Other
+df2 <- df2 %>% select(-check)
+#I removed serovars that appeared in low amounts/appeared infrequently and bundled them into an "other" category
+#Check allows me to make sure everything still adds up to 1 and that I didn't accidentially delete or fail to delete something
+df2long <- df2 %>% pivot_longer(cols = 2:14)
+#This puts it in the proper format for the area plot
+df2long$name <- as.factor(df2long$name)
+df2long$Day <- as.integer(df2long$Day)
+#these need to be this way so area plot works
+df2long$name <- factor(df2long$name, levels = 
+    c("Other", "Hart", "Mues", "Oran", "Brae", "Agbe", "GiveI", "NewpII", "Typm", "BrazI", "Rubi", "MuenI", "MontII"), ordered = TRUE)
+#now I am ordering the serovars so that the ones that appear most frequently are first and so the area plot looks prettier
+#It doesn't matter too much the order, so long as the biggest are on the bottom
+
+#Now to rename the variables
+
+df2long <- df2long %>% rename(
+    Serovar = name
+)
+
+clrs <- c("#424242", "#ee3b3b", "#b23aee", "#ff1493", "#ffd700", "#ffa500", "#b3ee3a", "#2e8b57", "#ffe1ff", "#cd6600", "#8ee5ee", "#7AC5CD", "#53868B")
+
+area <- df2long %>% ggplot(aes(x=Day, y=value, fill=Serovar)) + geom_area() + 
+  scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0)) + 
+  scale_fill_manual(values = clrs)
+area
+
+save_location <- here::here("data", "processed-data", "Figures")
+ggsave("areaplot.jpeg", plot = area, path = save_location , width = 10, height = 4.5)
+
+#ggsave for saving area plot
