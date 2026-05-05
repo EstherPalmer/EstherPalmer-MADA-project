@@ -107,7 +107,7 @@ rngseed <- 1234
 set.seed(rngseed)
 
 train <- df4
-test <- df5
+#test <- dfX
 #I will train on the daily, test on the weekly
 
 lm_mod <- linear_reg()
@@ -291,10 +291,11 @@ rf_pred1 <- collect_predictions(rf_fit_cv1)
 rf_p1 <- rf_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + xlim(1, 11) + ylim(1, 11)
 rf_p1
 
-rf_train_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
+#rf_train_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
 
-rf1_tree <- rf_fit %>% extract_fit_parsnip() %>% vip::vip()
-rf1_tree
+
+#rf1_tree <- rf_fit %>% extract_fit_parsnip() %>% vip::vip()
+#rf1_tree
 
 rf_test_pred <- predict(rf_fit, test) %>%
   bind_cols(test %>% select(complexity))
@@ -324,8 +325,11 @@ cor_plot4
 
 # df7 <- colSums(df6[c("Anat", "AquaInve")] >0)
 
-df7 <- df6 
+df7 <- df6
+df7[df7 > 0] <- 1
 
+cor_plot5 <- corrplot::corrplot(cor(df7, use = "everything"), method = "number", type = "upper")
+cor_plot5
 
 #set.seed(222)
 #ind <- sample(2, nrow(df4), replace = TRUE, prob = c(.8, .2))
