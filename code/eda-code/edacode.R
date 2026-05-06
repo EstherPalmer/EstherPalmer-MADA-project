@@ -85,6 +85,7 @@ plot18
 #To me this says there is no weekly scheduled salmonella dumping in the water
 
 
+
 ## ---- Histogram and Area Plot -------
 
 #histogram showing how many samples have each number of serovars in them
@@ -113,13 +114,28 @@ df2$check <- df2$BrazI + df2$Brae + df2$MontII + df2$MuenI + df2$Mues + df2$Rubi
 df2 <- df2 %>% select(-check)
 #I removed serovars that appeared in low amounts/appeared infrequently and bundled them into an "other" category
 #Check allows me to make sure everything still adds up to 1 and that I didn't accidentially delete or fail to delete something
+df2 <- df2 %>% rename(
+    Hartford = Hart,
+    Muenster = Mues,
+    Oranienburg = Oran,
+    Braenderup = Brae,
+    Agbeni = Agbe,
+    NewportII = NewpII,
+    Typhimurium = Typm,
+    BrazilI = BrazI,
+    MuenchenI = MuenI,
+    Rubislaw = Rubi,
+    MontevideoII = MontII
+)
+#This renames all the kept serovars so in the final graph the legend has the full names
+
 df2long <- df2 %>% pivot_longer(cols = 2:14)
 #This puts it in the proper format for the area plot
 df2long$name <- as.factor(df2long$name)
 df2long$Day <- as.integer(df2long$Day)
 #these need to be this way so area plot works
 df2long$name <- factor(df2long$name, levels = 
-    c("Other", "Hart", "Mues", "Oran", "Brae", "Agbe", "GiveI", "NewpII", "Typm", "BrazI", "Rubi", "MuenI", "MontII"), ordered = TRUE)
+    c("Other", "Hartford", "Muenster", "Oranienburg", "Braenderup", "Agbeni", "GiveI", "NewportII", "Typhimurium", "BrazilI", "MuenchenI", "Rubislaw", "MontevideoII"), ordered = TRUE)
 #now I am ordering the serovars so that the ones that appear most frequently are first and so the area plot looks prettier
 #It doesn't matter too much the order, so long as the biggest are on the bottom
 
@@ -128,13 +144,14 @@ df2long <- df2long %>% rename(
     Serovar = name
 )
 
-clrs <- c("#424242", "#ee3b3b", "#b23aee", "#ff1493", "#ffd700", "#ffa500", "#b3ee3a", "#2e8b57", "#ffe1ff", "#cd6600", "#8ee5ee", "#7AC5CD", "#53868B")
+clrs <- c("#424242", "#ee3b3b", "#b23aee", "#ff1493", "#ffd700", "#ffa500", "#b3ee3a", "#2e8b57", "#97ffff", "#436eee", "#e8e8e8", "#bfbfbf", "#8c8c8c")
 
 area <- df2long %>% ggplot(aes(x=Day, y=value, fill=Serovar)) + geom_area() + 
   scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0)) + 
-  scale_fill_manual(values = clrs)
+  scale_fill_manual(values = clrs) +
+  ylab("Relative Serovar Frequency") + xlab("Days since start of sampling")
 area
 
 save_location <- here::here("results", "figures")
-ggsave("areaplot.jpeg", plot = area, path = save_location , width = 10, height = 4.5)
+ggsave("areaplot.jpeg", plot = area, path = save_location , width = 12, height = 4.5)
 ggsave("complexity_histogram.jpeg", plot = complexhist, path = save_location, width = 5, height = 3)
