@@ -62,7 +62,7 @@ There have been many attempts to model _Salmonella_ prevalence in water (Gorski 
 
 ## Description of data and data source
 
-Our lab went sampling for _Salmonella_ at an urban creek every weekday for 6 months, and then once a week for another 9 months. _Salmonella_ prevalence during daily sampling was extremely high with 97% (n=127/131) of samples positive. CRISPR-SeroSeq was performed on all positive samples, and generated serovar profiles for 106 samples. There were 26 serovars identified in total.
+Sampling for _Salmonella_ was conducted at an urban creek every weekday for 6 months, and then once a week for another 9 months. _Salmonella_ prevalence during daily sampling was extremely high with 97% (n=127/131) of samples positive. CRISPR-SeroSeq was performed on all positive samples, and generated serovar profiles for 106 samples. There were 26 serovars identified in total.
 Environmental data was collected at time of sampling, as well as weather data from the nearest UGA weather station (Georgia Weather - Automated Environmental Monitoring Network Page, n.d.), for a total of 20 variables total.
 
 ## Questions/Hypotheses to be addressed
@@ -83,7 +83,6 @@ It should be noted that several serovars within this study are polyphyletic, mea
 _Write code that reads in the file and cleans it so it's ready for analysis. Since this will be fairly long code for most datasets, it might be a good idea to have it in one or several R scripts. If that is the case, explain here briefly what kind of cleaning/processing you do, and provide more details and well documented code somewhere (e.g. as supplement in a paper). All materials, including files that contain code, should be commented well so everyone can follow along._
 
 Data was analyzed using R version 4.5.3.
-
 
 ## Statistical analysis
 
@@ -134,7 +133,7 @@ _Summarize what you did, what you found and what it means._
 ## Strengths and Limitations
 There have been many attempts to model for _Salmonella_ prevalence in water. This study is unique in that modeling was done on population complexity rather than prevalence, which is not something many other projects are able to do.
 
-The amount of data is a limitation in this study, many datasets used in this class contain thousands of datapoints, while this study has far fewer. This lends less statistical power to this study.
+The amount of data is a limitation in this study, many datasets used in this class contain thousands of datapoints, while this study has far fewer. This lends less statistical power to this study. This dataset also only includes measureable weather and enivornmental variables. However, _Salmonella_ is an enteric pathogen that has been shown to be carried by wildlife and other reserviors. This dataset does not include any information on the movement of such hosts and therefore the predictor variables may not be sufficient to capture the effect of wildlife activity on _Salmonella_.
 
 ## Conclusions
 _What are the main take-home messages?_

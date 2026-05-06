@@ -17,7 +17,8 @@ CSSdata <- readRDS(data_location2)
 
 ## ---- ComplexityByTime -------
 plot1 <- mydata %>% ggplot(aes(x=Day, y=complexity)) + geom_point() +
-  theme_bw()
+  theme_bw()  + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot1
 #Maybe some cyclical things?
 
