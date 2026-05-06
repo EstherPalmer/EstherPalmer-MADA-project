@@ -113,7 +113,7 @@ Big plot of all the weather/environmental data
 ```{r}
 knitr::include_graphics(here::here("results", "figures", "CombinedEDA.jpeg"))
 ```
-Figure 3:
+Figure 3: Compexity over variables kept for the full version of the model
 
 ## Basic statistical analysis
 Correlation plot of kept variables

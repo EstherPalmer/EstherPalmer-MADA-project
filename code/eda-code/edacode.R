@@ -30,19 +30,22 @@ plot1
 plot2 <- mydata %>% ggplot(aes(x=COND, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot2
 #I see no relationship
 plot3 <- mydata %>% ggplot(aes(x=TDS, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot3
 #this looks exactly the same as conductivity
 plot4 <- mydata %>% ggplot(aes(x=pH, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot4
 #there is one day where pH is really high
 #There is maybe a relationship?
@@ -50,7 +53,8 @@ plot5 <- mydata %>% ggplot(aes(x=temp, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Water Temperature") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot5
 #This might actually have a relationship!
 #for clarity this is temp of water
@@ -58,40 +62,46 @@ plot6 <- mydata %>% ggplot(aes(x=depth, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Depth") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot6
 #this looks the same as COND and TDS
 plot7 <- mydata %>% ggplot(aes(x=width, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Width") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot7
 #There are clearly 2 groups, my hypothesis is one group is from where Dawson measured the creek, and the other group is from where I measured the creek
 plot8 <- mydata %>% ggplot(aes(x=max.temp, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot8
 #This also looks like it's correlated!
 #this is temp of air
 plot9 <- mydata %>% ggplot(aes(x=min.temp, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot9
 #this also looks correlated, same as the other temps
 plot10 <- mydata %>% ggplot(aes(x=rel.humid, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Relative Humidity") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot10
 #this looks like maybe theres some correlation!
 plot11 <- mydata %>% ggplot(aes(x=twoinST, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot11
 #I am not going to graph every soil temp bc I'm fairly sure they're all the same
 #This like all the other temp variables looks correlated
@@ -99,27 +109,31 @@ plot12 <- mydata %>% ggplot(aes(x=wind.speed, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Wind Speed") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot12
 #I would argue no correlation
 plot13 <- mydata %>% ggplot(aes(x=radiation, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Radiation") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot13
 #this looks like a correlation!
 plot14 <- mydata %>% ggplot(aes(x=rain, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Rain") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot14
 #Ouch I would argue no correlation
 plot15 <- mydata %>% ggplot(aes(x=ET, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot15
 #This looks correlated which is weird bc I think this is how much water evaporates from plants
 #Might be a temp thing
@@ -128,14 +142,16 @@ plot16 <- mydata %>% ggplot(aes(x=turbidity, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Turbidity") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot16
 #This looks like it might be correlated!!
 plot17 <- mydata %>% ggplot(aes(x=flow_avg, y=complexity)) + geom_point() +
   #theme(axis.title.y = element_blank()) +
   ylab(" ") +
   xlab("Average Flow") +
-  theme_bw()
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 plot17
 #Maybe correlated??
 plot18 <- mydata %>% ggplot(aes(x=Weekday, y=complexity)) + geom_boxplot()
