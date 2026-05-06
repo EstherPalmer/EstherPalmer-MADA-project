@@ -110,6 +110,10 @@ Figure 2: The _Salmonella_ population in an urban creek exhibits dynamic daily c
 
 
 Big plot of all the weather/environmental data
+```{r}
+knitr::include_graphics(here::here("results", "figures", "CombinedEDA.jpeg"))
+```
+Figure 3:
 
 ## Basic statistical analysis
 Correlation plot of kept variables
