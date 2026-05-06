@@ -89,6 +89,7 @@ library(tidyr) #for data processing/cleaning
 library(skimr) #for nice visualization of data 
 library(here) #to set paths
 library(ggplot2) #for figures
+library(knitr) #for loading figures
 ```
 Loads packages
 
@@ -123,15 +124,23 @@ I plan to train my models on the data collected from this site daily for 6 month
 # Results
 
 ## Exploratory/Descriptive analysis
+There are on average 3.89 serovars per sample on the daily sampling, with a range from 1-11 serovars. Nearly 90% of samples contain more than one serovar.
+```{r}
+knitr::include_graphics(here::here("results", "figures", "complexity_histogram.jpeg"))
+```
 
+Complexity histogram
+
+Area plot
 _
+Big plot of all the weather/environmental data
 
 ## Basic statistical analysis
-
+Correlation plot of kept variables
 
 
 ## Full analysis
-
+Two initial models were tried with all variables. A linear model and a random forest model. Linear models have been used by many papers to model for _Salmonella_ prevalence in water. Both models had similar RMSE values, so the linear model was kept as it is easier to interpret.
 
 
 # Discussion
