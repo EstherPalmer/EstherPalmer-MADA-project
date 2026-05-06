@@ -86,6 +86,7 @@ plot18
 
 
 
+
 ## ---- Histogram and Area Plot -------
 
 #histogram showing how many samples have each number of serovars in them
@@ -145,12 +146,14 @@ df2long <- df2long %>% rename(
 )
 
 clrs <- c("#424242", "#ee3b3b", "#b23aee", "#ff1493", "#ffd700", "#ffa500", "#b3ee3a", "#2e8b57", "#97ffff", "#436eee", "#e8e8e8", "#bfbfbf", "#8c8c8c")
+#This is to set colors for the area plot
 
 area <- df2long %>% ggplot(aes(x=Day, y=value, fill=Serovar)) + geom_area() + 
   scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0)) + 
   scale_fill_manual(values = clrs) +
   ylab("Relative Serovar Frequency") + xlab("Days since start of sampling")
 area
+#creates an area plot (spikey graph) showing proportion of each serovar over time
 
 save_location <- here::here("results", "figures")
 ggsave("areaplot.jpeg", plot = area, path = save_location , width = 12, height = 4.5)

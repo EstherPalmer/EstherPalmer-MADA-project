@@ -82,12 +82,12 @@ It should be noted that several serovars within this study are polyphyletic, mea
 ## Data import and cleaning
 _Write code that reads in the file and cleans it so it's ready for analysis. Since this will be fairly long code for most datasets, it might be a good idea to have it in one or several R scripts. If that is the case, explain here briefly what kind of cleaning/processing you do, and provide more details and well documented code somewhere (e.g. as supplement in a paper). All materials, including files that contain code, should be commented well so everyone can follow along._
 
-
+Data was analyzed using R version 4.5.3.
 
 
 ## Statistical analysis
 
-I plan to train my models on the data collected from this site daily for 6 months, then test it on data collected from the same site weekly for another 9 months.
+
 
 {{< pagebreak >}}
 
@@ -128,7 +128,9 @@ As such, a good model for determining _Salmonella_ risk is necessary.
 _Summarize what you did, what you found and what it means._
 
 ## Strengths and Limitations
-_Discuss what you perceive as strengths and limitations of your analysis._
+There have been many attempts to model for _Salmonella_ prevalence in water. This study is unique in that modeling was done on population complexity rather than prevalence, which is not something many other projects are able to do.
+
+The amount of data is a limitation in this study, many datasets used in this class contain thousands of datapoints, while this study has far fewer. This lends less statistical power to this study.
 
 ## Conclusions
 _What are the main take-home messages?_
