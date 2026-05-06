@@ -93,6 +93,16 @@ complexhist <- CSSdata %>% ggplot(aes(x=complexity)) + geom_histogram() + theme_
   scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0))
 complexhist
 
+mean(CSSdata$complexity)
+#On average how many serovars are in a sample?
+#3.868
+
+comp <- as.factor(CSSdata$complexity)
+skim(comp)
+multi <- (106 - 11)/106 *100
+multi
+#calculates the % of samples that contain multiple serovars
+
 #I want to make an area plot of all the serovars over time, first though I want a df that has complexity removed
 #Then I want to convert it to long(?) format so I can turn it into an area plot
 #I also want to make an other serovar category for the area plot bc it can get to be alot when theres 26 different serovars
@@ -114,7 +124,6 @@ df2long$name <- factor(df2long$name, levels =
 #It doesn't matter too much the order, so long as the biggest are on the bottom
 
 #Now to rename the variables
-
 df2long <- df2long %>% rename(
     Serovar = name
 )
@@ -126,8 +135,6 @@ area <- df2long %>% ggplot(aes(x=Day, y=value, fill=Serovar)) + geom_area() +
   scale_fill_manual(values = clrs)
 area
 
-save_location <- here::here("data", "processed-data", "Figures")
+save_location <- here::here("results", "figures")
 ggsave("areaplot.jpeg", plot = area, path = save_location , width = 10, height = 4.5)
 ggsave("complexity_histogram.jpeg", plot = complexhist, path = save_location, width = 5, height = 3)
-
-#ggsave for saving area plot

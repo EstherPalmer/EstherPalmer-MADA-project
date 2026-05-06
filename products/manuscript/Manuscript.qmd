@@ -1,5 +1,5 @@
 ---
-title: "Example Manuscript Template for a Data Analysis Project"
+title: "Analysis of daily changes in a population of Salmonella in an urban creek"
 author: ""
 format:
   docx:
@@ -82,41 +82,12 @@ It should be noted that several serovars within this study are polyphyletic, mea
 ## Data import and cleaning
 _Write code that reads in the file and cleans it so it's ready for analysis. Since this will be fairly long code for most datasets, it might be a good idea to have it in one or several R scripts. If that is the case, explain here briefly what kind of cleaning/processing you do, and provide more details and well documented code somewhere (e.g. as supplement in a paper). All materials, including files that contain code, should be commented well so everyone can follow along._
 
-```{r}
-library(readxl) #for loading Excel files
-library(dplyr) #for data processing/cleaning
-library(tidyr) #for data processing/cleaning
-library(skimr) #for nice visualization of data 
-library(here) #to set paths
-library(ggplot2) #for figures
-library(knitr) #for loading figures
-```
-Loads packages
 
-```{r}
-#path to data
-enviro_data_location <- here::here("data","raw-data","Environmental_Data_Final.xlsx")
-CSS_data_location <- here::here("data", "raw-data", "Daily_Sampling_Normalized_CSS_6mo.xlsx")
-#load data.
-#there are 2 files, one containing the environmental/weather data, and one containing CSS data
-enviro_rawdata <- readxl::read_excel(enviro_data_location, sheet = "Sheet2")
-#I am going to use the dataset that excludes weekends for this preliminary look, Sheet1 contains the data that has weekends
-CSS_rawdata <- readxl::read_excel(CSS_data_location)
-#This will read in the CSS data
-```
-This code chunk loads my raw data. I have two files, one with completed CSS analysis, and another with environmental and weather variables. The environmental and weather variable excel sheet has 2 sheets, on sheet1 there is all the data including the weather data for the weekends. On sheet2 the weekend data was removed and only data for the day of sampling was left.
 
-```{r}
-dplyr::glimpse(enviro_rawdata)
-#looking at the raw environmental data
-summary(enviro_rawdata)
-```
-
-This provides a look at all the environmental data. I can see several variables have been listed as characters when they need to be numeric, and there are several NAs so I will have some cleaning to do in the future. I also don't trust DO I think the instrument was acting up so I kinda want to drop the whole variable. Day is also being treated like a numeric variable rather than an ordinal (I think ordinal? it has order) variable. Although maybe it is quantitative since you can do things like addition to it?
 
 ## Statistical analysis
 
-I plan to train my models on the data collected from this site daily for 6 months, then test it on data collected from the same site weekly for another 9? months.
+I plan to train my models on the data collected from this site daily for 6 months, then test it on data collected from the same site weekly for another 9 months.
 
 {{< pagebreak >}}
 
@@ -124,15 +95,20 @@ I plan to train my models on the data collected from this site daily for 6 month
 # Results
 
 ## Exploratory/Descriptive analysis
-There are on average 3.89 serovars per sample on the daily sampling, with a range from 1-11 serovars. Nearly 90% of samples contain more than one serovar.
+There are on average 3.89 serovars per sample on the daily sampling, with a range from 1-11 serovars. Nearly 90% of samples contain more than one serovar (Figure 1).
 ```{r}
 knitr::include_graphics(here::here("results", "figures", "complexity_histogram.jpeg"))
 ```
+Figure 1: _Salmonella_ exists in complex populations within an urban creek
 
-Complexity histogram
+An area plot of proportions of each serovar over time demonstrates that the _Salmonella_ population within the creek changes rapidly. Some serovars such as MontevideoII, MuenchenI, and Rubislaw are seen extremely frequently, being present in upwards of 80% of samples. These serovars could be considered environmentally endemic. Meanwhile several serovars such as Typhimurium, Newport, Agbeni, and Oranienburg seem to be more transient, present for a few days before diappearing, often in cyclical patterns (Figure 2).
+```{r}
+knitr::include_graphics(here::here("results", "figures", "areaplot.jpeg"))
+```
+Figure 2: The _Salmonella_ population in an urban creek exhibits dynamic daily changes. Spikes represent the proportion of each sample each serovar represents. Days are numbered from start of sampling.
 
-Area plot
-_
+
+
 Big plot of all the weather/environmental data
 
 ## Basic statistical analysis
@@ -144,6 +120,9 @@ Two initial models were tried with all variables. A linear model and a random fo
 
 
 # Discussion
+This is the first study to investigate daily changes _Salmonella_ populations in water over a significant period. It reveals dynamic _Salmonella_ populations consisting of environmentally endemic serovars interrupted by sporadic occurrences of other, transient serovars. This study shows rapid temporal changes in _Salmonella_ populations in a suburban creek. While this is not an agricultural watershed and this water is not used for irrigation, the findings from this project indicate that food safety risks posed by surface water contaminated with _Salmonella_ can also change rapidly. A sample taken on a certain day may not accurately represent the microbial risk of the surface water by the time the culture or other detection is completed and confirmed.
+
+As such, a good model for determining _Salmonella_ risk is necessary.
 
 ## Summary and Interpretation
 _Summarize what you did, what you found and what it means._
