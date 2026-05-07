@@ -1,0 +1,159 @@
+---
+title: Project Review Template 
+author: Joseph Dainis
+date: date-modified
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+# Overview
+
+Title of project: Unclear. Salmonella and Environmental Sampling
+
+Name of project author(s): Esther Palmer
+
+Name of project reviewer: 1
+
+# Specific project content evaluation
+Evaluate the different parts of the project by filling in the sections below.
+
+
+## Background, Context and Motivation
+How well is the context of the project described? Is a comprehensive background, including summary of previous/related work given? Is the project well placed into the context of existing work (including proper referencing of existing work). Is it clear why the project was undertaken and what new information it hopes to provide?
+
+### Feedback and Comments
+
+I think overall the motivation for the project is there. The author provided apt descriptions of Salmonella and why the different serovars are important to study. The author sets up the story nicely explaining that prior studies have attempted to predict Salmonella serovar prevalence with models, but many of them are not general and are specific to that study. In the manuscript, the author includes additional sentences of statistics/information she would like to include, but has not yet. Example: "(insert statistic about how like only 100 of those 2600 serovars really cause human illness)". Once these minor additions have been fully fleshed out, I think it will be a very nice introduction/background to this study.
+
+### Summary assessment (PICK ONE, DELETE THE OTHERS)
+* strong contextualization and motivation
+
+
+## Question description
+How well and clear are the question(s)/hypotheses the project aims to address described? Is it clear how the questions relate to the data?
+
+
+### Feedback and Comments
+
+The question(s) and hypotheses for this study are clear. The author is aiming to look at two facets using the data: how do environmental/weather factors influence the complexity of Salmonella serovars (aka number of serovars in the sample) as well as if any specific Salmonella serovars are influenced by these factors. The questions clearly relate to the data collected, which includes Salmonella sequencing data in the samples as well as the environmental conditions on the day of the sample collection. This can also be done over time as samples were collected quite often over the course of 6 months.
+
+### Summary assessment
+* question/hypotheses fully clear
+
+
+## Data description
+How well is the data overall described? Is the source provided? Is a codebook or other meta-information available that makes it clear what the data is? 
+
+### Feedback and Comments
+
+The data used for this study is a personal set of data collected by the author. Over a period of 6 months, the authors collected water samples from the same creek, totaling ~150 samples. Additionally, the authors made weekly visits to collect more samples after this 6 month period for 9 months, totaling over a year's worth of sample collections. The data also includes environmental data, such as water pH, turbidity, etc. as well as weather data provided by the UGA weather service (author says she will provide a link in the manuscript but did not provide it). Finally, the data includes sequencing data to identify the Salmonella serovars. There is no codebook included, but the data seems relatively straightforward and easy to understand.
+
+### Summary assessment
+* source and overall structure of data well explained
+
+
+## Data wrangling and exploratory analysis
+How well is the data cleaned/processed and explored? Are all steps reasonable and well explained? Are alternatives discussed and considered? Are meaningful exploratory results shown (e.g. in the supplementary materials)?
+
+### Feedback and Comments
+
+The data is very well-documented (this is a comment I will praise later on in the review) in how the data was cleaned and explored in the exploratory data analysis section. The steps for cleaning the data were all reasonable and very well-explained. Again, I would recommend the author to clean up the actual language used (see additional comments section), as it sounds very personal/"notes". But, the flow for how the cleaning was done makes sense, and all steps are very well-described in their purpose and why they are being done. The exploratory data analysis includes a number of figures in the code, but these have not been translated over to the manuscript as of yet. It is clear that there are certain variables which show exciting trends in the code, such as water temperature and air temperature and the correlation with serovar complexity, but again, this has not been translated to the manuscript yet. I would recommend the author consider other ways to present the data, as many of the figures are simple dotplots where the labels for the graphs have not been updated. So, I think this is an excellent start, but would recommend the author polish many of the figures in this section.
+
+### Summary assessment
+* some weaknesses in wrangling and exploratory component
+
+
+
+## Appropriateness of Analysis
+Were the analysis methods appropriate for the data? Was the analysis done properly? Were different components of the analysis (e.g. performance measure, variable selection, data pre-processing, model evaluation) done in the best way possible and explained well?
+
+### Feedback and Comments
+
+Again, the analysis methods had not yet been translated to the final manuscript, so it is difficult to know what would be included as the finalized form for this study. In the statistical-analysis.R file, the author used a linear model and a Random Forest machine learning model to explore temperature's effect on Salmonella serovar complexity. There also appears to be the working stages of a linear model for serovar correlation that has not yet been completed. In the notes, the author does not certain reasons for using these models based on past expertise/usage in the lab. Ex: "#I know previous lab members have used this to narrow down the amount of variables in their data". However, I would appreciate in the manuscript if the author includes why these models have been used beyond a "they have been used by past lab members". Providing the reason those past lab members chose these models would provide stronger reasoning to the model choices. The author does look at metrics to assess the fit of these two models, but I would be interested if the author tried a LASSO model to fully show that the RF does outcompete a different machine learning model.
+
+### Summary assessment
+* defensible but not optimal analysis 
+
+## Presentation
+How well are results presented? Are tables and figures easy to read and understand? Are the main figures/tables publication level quality? 
+
+### Feedback and Comments
+
+The manuscript has not been written, so it is tough to assess the tables and figures in what their final format will look like. I see the beginning stages of the exploratory data analysis figures, and they are a solid foundation to build off of. As mentioned previously, I think trialing out different graph formats would be helpful so it won't just be the same dot plot over and over, which might be confusing to keep track of in the manuscript to know which variables impact. The author might also consider making a table that includes every weather/environmental variable and only presenting the most impactful variables on serovar complexity in graphical form. As of yet, the figures are not publication level, but a few simple changes (label/axes formatting, titles, color schemes, etc.) will get them there.
+
+### Summary assessment
+* results are poorly presented, hard to understand, poor quality
+
+
+## Discussion/Conclusions
+Are the study findings properly discussed? Are strengths and limitations acknowledged? Are findings interpreted properly?
+
+### Feedback and Comments
+
+There is no discussion of the study findings as of yet in the manuscript. As mentioned prior, I can see that much of the focus is going to be on how environmental temperature affects Salmonella serovar complexity based on the EDA and modeling. Much focus needs to be put into wrapping up this section along with the machine learning and finalizing what figures will be included in the manuscript.
+
+### Summary assessment
+* major parts of discussion missing or wrong 
+
+
+## Further comments
+
+One comment I would like to add is the language used in many sections of this repository are very casual. Many times, it seems like the author is making notes to themselves on further additions they would like to add to the manuscript. I would recommend the author be careful in their language choices, and to clean-up the casual language used to make the manuscript writing more professional/"publication-ready".
+
+
+# Overall project content evaluation
+Evaluate overall features of the project  by filling in the sections below.
+
+
+## Structure
+Is the project well structured? Are files in well labeled folders? Do files have reasonable names? Are all "junk" files not needed for analysis/reproduction removed? By just looking at files and folders, can you get an idea of how things fit together?
+
+### Feedback and Comments
+
+The project is well structured. The ReadME files have been updated to properly reflect the contents of the files contained within the folders. The folders and files are properly labeled and easy to interpret what they would contain. All "junk" files appear to have been removed from the repository. I found it quite easy to navigate the repository and find what I was looking for.
+
+### Summary assessment
+* well structured
+
+
+## Documentation 
+How well is the project documented? Are you able to understand each step of the whole analysis, each decision that was made, and each line of code? Is enough information provided as comments in code or as part of Rmd files? 
+
+### Feedback and Comments
+
+For what has been done so far in the code for this study, it is clear to me the author is meticulously keeping track of the documentation of the code. It was very clear to see the flow/progression of the code based on the additional notes included, particularly in the cleaning and modeling sections. I was able to clearly see the author's line of thinking as they cleaned the data, ran it through exploratory data analysis and began using models to predict the Salmonella serovar complexity. Again, I would recommend the author to just peruse back and update the language to be less of a "notes to themself" style and more of a professional tone, but everything is there.
+
+### Summary assessment
+* fully and well documented
+
+
+
+## Reproducibility
+Are all results fully reproducible? Is documentation provided which clearly explains how to reproduce things, and does it work without the need for any manual intervention? Are you able to re-run the whole analysis without having to do manual interventions/edits?
+
+### Feedback and Comments
+
+I ran into a few issues as I was running through the code. For the most part, everything worked properly.
+
+Two issues I ran into-
+''rf_train_pred' not found': I tried running through the machine learning modeling in the stastical-analysis.R file, and ran into an error where the rf_train_pred dataframe could not be found. Might instead be rf_pred1 but I am not sure, so please take a look at this.
+
+''df5' not found': This was an easier fix, but making the test <- d5 so far up in the code before d5 is made under the Serovar Correlation part of the code caused an issue. Consider re-ordering this so that this error doesn't pop up.
+
+
+### Summary assessment
+* small parts not reproducible or required manual intervention 
+
+
+## Thoroughness
+How thorough was the overall study? Were alternatives (e.g. different ways of processing the data or different models) considered? Were alternatives discussed? Were the questions/hypotheses fully and thoroughly addressed?
+
+### Feedback and Comments
+
+I think the author has the ideas of thoroughness, they just have not been fully translated to the repository/code/manuscript. It is evident that there are reasonings behind why they chose a linear model (for comparison) and Random Forest machine model (based on previous usage in their lab), but I think this can be fleshed out more. Comparisons to another machine learning model like LASSO would strengthen their argument for RF as their model of choice. The author does not mention alternative ways to process the data. I do believe the questions/hypotheses will be mostly addressed. I don't see much code that explores the changes on an individual serovar level like the author discussed in their questions/hypotheses section, but they might remove that from this study as it seems like they have more than enough just looking at the environmental effects on Salmonella serovar complexity.
+
+### Summary assessment
+* decent level of thoroughness
