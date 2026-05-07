@@ -6,8 +6,7 @@ format:
     toc: false
     number-sections: true
     highlight-style: github
-bibliography: ../../assets/dataanalysis-references.bib
-csl: ../../assets/american-journal-of-epidemiology.csl
+
 ---
 
 The structure below is one possible setup for a manuscript stemming from a data analysis project. It loosely follows the structure of a standard scientific manuscript. Adjust as needed. You don't need to have exactly these sections, but the content covering those sections should be addressed.
@@ -84,6 +83,9 @@ Data was analyzed using R version 4.5.3. Data was imported into R, cleaned, and 
 
 ## Statistical analysis
 
+Since linear regressions assume that no variables are correlated, a Pearson's correlation was done to determine if any predictor variables correlate with each other. Predictor variables with a correlation greater than 0.75 were removed from further analysis.
+
+The tidymodels framework was used to create several linear regression models. Subset selection was undergone by iteratively removing the predictor with the largest p-value until only predictors with p< 0.05 remained. A random forest model with all predictors was also done.
 
 
 {{< pagebreak >}}
@@ -102,9 +104,9 @@ An area plot of proportions of each serovar over time demonstrates that the _Sal
 ```{r}
 knitr::include_graphics(here::here("results", "figures", "areaplot.jpeg"))
 ```
-Figure 2: The _Salmonella_ population in an urban creek exhibits dynamic daily changes. Spikes represent the proportion of each sample each serovar represents. Days are numbered from start of sampling.
+Figure 2: The _Salmonella_ population in an urban creek exhibits dynamic daily changes. Spikes represent the proportion of each sample each serovar represents. Days are numbered from start of sampling. Serovars considered environmentally endemic are colored in grey, while transient serovars are brightly colored.
 
-A Pearson's correlation was done to determine if any predictor variables correlate with each other, and variables with a correlation greater than 0.75 were removed from further analysis. EDA plots were created to determine the relationship between complexity and each predictor variable, the kept variables are shown in Figure 3.
+A Pearson's correlation was done to determine if any predictor variables correlate with each other, and variables with a correlation greater than 0.75 were removed from further analysis. EDA plots were created to determine the relationship between complexity and each predictor variable, the kept variables are shown in Figure 3. No variables had an obviously non-linear relationship with complexity.
 ```{r}
 knitr::include_graphics(here::here("results", "figures", "CombinedEDA.jpeg"))
 ```
@@ -112,21 +114,21 @@ Figure 3: Compexity over variables kept for the full version of the model
 
 ## Full analysis
 Two initial models were tried with all variables. A linear model and a random forest model. Linear models have been used by many papers to model for _Salmonella_ prevalence in water. Both models had similar RMSE values, so the linear model was kept as it is easier to interpret.
-
 ```{r}
 
 ```
-Table 1: stats from both models
+Table 1: comparison of first to last models, test and train data.
 
 ```{r}
-
-```
-Table 2: comparison of first to last models, test and train data.
-
-```{r}
-
+knitr::include_graphics(here::here("results", "figures", "PredictedPlots.jpeg"))
 ```
 Figure 4: residuals of first and last models
+
+```{r}
+
+```
+Table 2: Final predictor values of subset selection LR model
+
 
 # Discussion
 This is the first study to investigate daily changes _Salmonella_ populations in water over a significant period. It reveals dynamic _Salmonella_ populations consisting of environmentally endemic serovars interrupted by sporadic occurrences of other, transient serovars. This study shows rapid temporal changes in _Salmonella_ populations in a suburban creek. While this is not an agricultural watershed and this water is not used for irrigation, the findings from this project indicate that food safety risks posed by surface water contaminated with _Salmonella_ can also change rapidly. A sample taken on a certain day may not accurately represent the microbial risk of the surface water by the time the culture or other detection is completed and confirmed.
@@ -135,6 +137,8 @@ As such, a good model for determining _Salmonella_ risk is necessary.
 
 ## Summary and Interpretation
 _Summarize what you did, what you found and what it means._
+
+The final linear model subset selection yielded four variables. 
 
 ## Strengths and Limitations
 There have been many attempts to model for _Salmonella_ prevalence in water. This study is unique in that modeling was done on population complexity rather than prevalence, which is not something many other projects are able to do.

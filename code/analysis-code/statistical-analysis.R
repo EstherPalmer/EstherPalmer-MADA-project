@@ -14,6 +14,7 @@ library(caret) #modeling
 library(ranger) #random forest modeling but different
 library(corrplot) #to make a correlation plot of my variables
 library(vip) #for seeing random forest results
+library(cowplot) #for combining figures
 
 #path to data
 #note the use of the here() package and not absolute paths
@@ -137,7 +138,11 @@ collect_metrics(lm_fit_cv1)
 
 lm_pred1 <- collect_predictions(lm_fit_cv1)
 
-lm_p1 <- lm_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + xlim(1, 11) + ylim(1, 11)
+lm_p1 <- lm_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + 
+  xlim(1, 11) + ylim(1, 11) +
+  xlab(" ") + ylab(" ") +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 lm_p1
 
 #removing radiation
@@ -264,27 +269,17 @@ lm_train_pred8 %>% yardstick::rmse(truth = complexity, estimate = .pred)
 
 lm_pred8 <- collect_predictions(lm_fit_cv8)
 
-lm_p8 <- lm_pred8 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + xlim(1, 11) + ylim(1, 11)
+lm_p8 <- lm_pred8 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + 
+  xlim(1, 11) + ylim(1, 11) +
+  xlab(" ") + ylab(" ") +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 lm_p8
 
 ############################
 #### Random Forest attempt
 
-#I don't know that this is going well, may try something else?
-#I know previous lab members have used this to narrow down the amount of variables in their data
-
-
-#rf <- randomForest(complexity~., data=train, na.action = na.roughfix)
-#print(rf)
-#na.roughfix estimates missing values, which I'm hoping will lead to less nas in the prediction
-
-#pred1 <- predict(rf, train)
-#there's a lot of NA's
-#it did not like that complexity and pred1 are not factors
-#It further does not like that they don't match
-#confusionMatrix(as.factor(pred1), as.factor(train$complexity))
-
-#ok I found a different package lets try this maybe it will hate me less
+#I want to try a different model other than a linear regression, so I'll try a random forest
 
 rf_mod1 <- rand_forest(trees = 1000) %>% set_engine("ranger", seed = rngseed) %>% set_mode("regression")
 rf_wf1 <- workflow() %>% add_model(rf_mod1) %>% add_formula(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg)
@@ -292,15 +287,75 @@ rf_fit_cv1 <- rf_wf1 %>% fit_resamples(folds, control = control_resamples(save_p
 rf_fit_cv1
 collect_metrics(rf_fit_cv1)
 
+rf_fit1 <- rf_wf1 %>% fit(train)
+rf_train_pred1 <- predict(rf_fit1, train) %>% bind_cols(train %>% select(complexity))
+
+rf_train_pred1 %>% yardstick::rmse(truth = complexity, estimate = .pred)
+
 rf_pred1 <- collect_predictions(rf_fit_cv1)
 
-rf_p1 <- rf_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + xlim(1, 11) + ylim(1, 11)
+rf_p1 <- rf_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + 
+  xlim(1, 11) + ylim(1, 11) +
+  xlab(" ") + ylab(" ") +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
 rf_p1
 
+#The rmse for the cv is roughly the same as the linear regression. As such, I'll keep the linear regression since it is easier to interpret
+
+############################
+#### Using Test data
+
+#I now want to test all 3 models on my test data
+#Model 1 Random Forest
+#Model 2 Linear regression full predictors
+#Model 3 Linear regression after subset selection of predictors
+
+rf_test_pred1 <- predict(rf_fit1, test) %>% bind_cols(test %>% select(complexity))
+rf_test_pred1 %>% yardstick::rmse(truth = complexity, estimate = .pred)
+
+rf_fin_p1 <- rf_test_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + 
+  xlim(1, 11) + ylim(1, 11) +
+  xlab(" ") + ylab(" ") +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
+rf_fin_p1
 
 
+lm_test_pred1 <- predict(lm_fit1, test) %>% bind_cols(test %>% select(complexity))
+lm_test_pred1 %>% yardstick::rmse(truth = complexity, estimate = .pred)
+
+lm_fin_p1 <- lm_test_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + 
+  xlim(1, 11) + ylim(1, 11) +
+  xlab(" ") + ylab(" ") +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
+lm_fin_p1
 
 
+lm_test_pred8 <- predict(lm_fit8, test) %>% bind_cols(test %>% select(complexity))
+lm_test_pred8 %>% yardstick::rmse(truth = complexity, estimate = .pred)
+
+lm_fin_p8 <- lm_test_pred8 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + 
+  xlim(1, 11) + ylim(1, 11) +
+  xlab(" ") + ylab(" ") +
+  theme_bw() + 
+  theme(panel.grid.major.x = element_blank(), panel.grid.major.y = element_blank(), panel.grid.minor.x = element_blank(), panel.grid.minor.y = element_blank())
+lm_fin_p8
+
+#So after the test data, the random forest model has the best RMSE, by like a lot
+
+combined_residuals_plot <- plot_grid(lm_p1, lm_p8, rf_p1, lm_fin_p1, lm_fin_p8, rf_fin_p1, labels = c("A.", "B.", "C.", "D.", "E.", "F."), label_size = 12, label_x = .06)
+combined_residuals_plot
+
+finRes_comb <- ggdraw(combined_residuals_plot) + 
+  draw_label("Predicted Complexity", x=0, y=.5, angle = 90, vjust = 1.1) + 
+  draw_label("Actual Complexity", x=.5, y=0, vjust = -0.9)
+finRes_comb
+#I would like it noted that I worked very hard to not have the D. overlap with the axis title
+
+save_location <- here::here("results", "figures")
+ggsave("PredictedPlots.jpeg", plot = finRes_comb, path = save_location , width = 6, height = 4)
 
 ############################
 #### Serovar correlation
@@ -325,43 +380,3 @@ df7[df7 > 0] <- 1
 cor_plot5 <- corrplot::corrplot(cor(df7, use = "everything"), method = "number", type = "upper")
 cor_plot5
 
-
-
-
-
-
-
-
-#Old code below, want to maybe go back to it later, ignore for now
-
-
-#set.seed(222)
-#ind <- sample(2, nrow(df4), replace = TRUE, prob = c(.8, .2))
-#train <- df4[ind==1,]
-#test <- df4[ind==2,]
-#So from what I can tell, I assigned 80% of the data to train, and 20% to test
-
-#lm_fit <- linear_reg() %>% set_engine("glm") %>%
-#  fit(complexity ~ TDS + pH + temp + depth + width + rel.humid + wind.speed + radiation + rain + turbidity + flow_avg,
-#  data = train)
-#tidy(lm_fit)
-#This is interesting but far from perfect
-#Should maybe run a random forest whatever to select variables for use
-#This also doesn't show a good relationship between temp and complexity despite my dotplots showing one
-#lm_train_pred <- predict(lm_fit, train) %>% 
-#  bind_cols(train %>% select(complexity))
-
-#lm_train_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
-
-#lm_test_pred <- predict(lm_fit, test) %>% 
-#  bind_cols(test %>% select(complexity))
-
-#lm_test_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
-#better rmse on the test than the training which is interesting
-
-#ok so for now I will need to split into test and training data
-#I do actually have a second dataset that I can use from this same site with all the same variables just sampling weekly instead of daily
-#and I plan to use that second data set to train my model
-#however I don't know where exactly that is and I don't want to go searching I also don't know if it's fully finished
-#will ask undergrads later
-#so for now split into training and test data, redo better later
