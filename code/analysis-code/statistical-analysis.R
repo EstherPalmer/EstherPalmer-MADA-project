@@ -104,11 +104,16 @@ df4 <- df4 %>% select(-Anat, -AquaInve, -BrazI, -Brae, -Infa, -MontII, -MuenI, -
 
 df4$complexity <- as.integer(df4$complexity)
 
+## now I want to edit my test data (the weekly data) so it has the same set of variables as the train
+df5 <- weeklydata %>% select(-ET, -COND, -Day, -max.temp, -min.temp, -twoinST, -fourinST, -eightinST)
+df6 <- df5 %>% select(TDS, pH, temp, depth, width, rel.humid, wind.speed, radiation, rain, turbidity, flow_avg, complexity)
+#This is my final test dataset!
+
 rngseed <- 1234
 set.seed(rngseed)
 
 train <- df4
-#test <- df
+test <- df6
 #I will train on the daily, test on the weekly
 
 lm_mod <- linear_reg()
@@ -292,22 +297,10 @@ rf_pred1 <- collect_predictions(rf_fit_cv1)
 rf_p1 <- rf_pred1 %>% ggplot(aes(x=complexity, y=.pred)) + geom_point() + xlim(1, 11) + ylim(1, 11)
 rf_p1
 
-#rf_train_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
 
 
-#rf1_tree <- rf_fit %>% extract_fit_parsnip() %>% vip::vip()
-#rf1_tree
 
-rf_test_pred <- predict(rf_fit, test) %>%
-  bind_cols(test %>% select(complexity))
 
-rf_test_pred %>% yardstick::rmse(truth = complexity, estimate = .pred)
-#This still looks like a better rmse than the linear model?
-#have no idea what my acutal model looks like though
-
-#I think that while this random forest model is maybe a better fit than my linear model,
-#since I can't seem to learn the final formula, it may be better to stick with my linear model
-#since I do need to know what my predictors are
 
 ############################
 #### Serovar correlation
@@ -331,6 +324,16 @@ df7[df7 > 0] <- 1
 
 cor_plot5 <- corrplot::corrplot(cor(df7, use = "everything"), method = "number", type = "upper")
 cor_plot5
+
+
+
+
+
+
+
+
+#Old code below, want to maybe go back to it later, ignore for now
+
 
 #set.seed(222)
 #ind <- sample(2, nrow(df4), replace = TRUE, prob = c(.8, .2))
