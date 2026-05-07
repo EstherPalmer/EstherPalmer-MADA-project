@@ -201,11 +201,11 @@ d8$Day <- as.integer(d8$Day)
 #Here I will clean my weekly sampling data in the same way I did the daily
 #Looks like I need to transpose the CSS data and clean up some of the extra stuff
 #For the weather I will need to clean up all the other variables the same
-d9 <- select(weekly_weather_rawdata, -DO, -SALT)
+d9 <- select(weekly_weather_rawdata, -DO, -SALT, -'Average Flow', -Complexity)
 d9 <- d9 %>% rename(
-  flow1 = FLOW...9,
-  flow2 = FLOW...10,
-  flow3 = FLOW...11,
+  flow1 = FLOW...8,
+  flow2 = FLOW...9,
+  flow3 = FLOW...10,
   depth = `DEPTH (cm)`,
   max.temp = `Max Temp`,
   min.temp = `Min Temp`,
@@ -227,14 +227,8 @@ flow_avg2 <- subset(d9, select = c(flow1, flow2, flow3))
 #this is a much nicer method than my first attempts bc it keeps the variable names!
 d9$flow_avg <- rowMeans(flow_avg2)
 #this creates a variable in d1 that is the average of all the flow measurements (we took 3)
-d10 <- select(d9, -flow1, -flow2, -flow3, -`Average Flow`)
+d10 <- select(d9, -flow1, -flow2, -flow3)
 #now that we have the average we don't need the individual flow measurements
-d10 <- d10 %>% select(-Complexity...26, -Complexity...2)
-#This is complexity calculated from the CSS data, but I think it's better to remove it and recalculate it
-#need to rename column 1 to Day, and change it from a number to whatever I made it in the other data sets
-d10 <- d10 %>% rename(
-  Day = '...1'
-)
 d10$Day <- as.character(d10$Day)
 #still need to fix width
 #there is one depth that is in inches
@@ -254,10 +248,6 @@ d10$width <- wd3$cm
 #replaces the column in the whole dataframe with the one in cm from w3
 
 d10$depth <- as.numeric(d10$depth)
-d10[13, 6] = 1.2*2.54
-#this still doesn't look right I have texted undergrads to confirm that they measured 1.2 inches
-#either that or it could be 1.2 feet, or 1 foot 2 in
-#will leave for now
 
 d10$wind.speed <- as.numeric(d10$wind.speed)
 
@@ -271,7 +261,10 @@ d11 <- as.data.frame(d11)
 #without this last command I wasn't actually able to see anything in the matrix which concerned me
 d12 <- d11 %>% janitor::row_to_names(row_number = 1)
 
-d12 <- d12 %>% select(-Sum)
+d12 <- d12 %>% select(-Sum, -Complexity)
+#These numbers were previously calculated by my undergrads in excel (before they gave me the data)
+#I want to recalculate complexity to make sure it's correct
+#Sum isn't helpful rn, it's just a check
 d12 <- dplyr::filter(d12, Day != "Frequency")
 d12$Day <- as.integer(d12$Day)
 d12$Day <- as.character(d12$Day)
@@ -291,24 +284,30 @@ d12 <- d12 %>% rename(
 )
 
 d12 <- d12 %>% mutate_at(vars(BrazI, MontII, MuenI, Rubi, Typm, GiveI, NewpII, Hart, CerrI, Schw, DKPPR), as.numeric)
-d12$Complexity <- as.integer(d12$Complexity)
 
-#Now this looks good! The only issue is that it seems like there are more CSS days than weather days.
-#I have asked Dawson for the remaining weather days
-#Once I have those I'll merge the CSS and weather data together
+d12 <- d12 %>% rowwise(Day)
+d12 <- d12 %>% mutate(complexity = sum(c_across(BrazI:DKPPR) >0, na.rm=TRUE))
 
+#Now this looks good!
 
+## ---- joindata --------
+#It will be helpful if these two data sets can go in one sheet
+d14 <- merge(d10, d12, by = "Day")
+d14$Day <- as.integer(d14$Day)
 
 ## ---- savedata --------
 processed_enviro_data <- d3
 processed_CSS_data <- d7
 merged_data <- d8
+merged_weekly_data <- d14
 # location to save file
 save_data_location1 <- here::here("data","processed-data","processed_enviro_data.rds")
 save_data_location2 <- here::here("data","processed-data","processed_CSS_data.rds")
 save_data_location3 <- here::here("data","processed-data","processed_merged_data.rds")
+save_data_location4 <- here::here("data","processed-data","processed_merged_weekly_data.rds")
 saveRDS(processed_enviro_data, file = save_data_location1)
 saveRDS(processed_CSS_data, file = save_data_location2)
 saveRDS(merged_data, file = save_data_location3)
+saveRDS(merged_weekly_data, file = save_data_location4)
 
 ## ---- notes --------

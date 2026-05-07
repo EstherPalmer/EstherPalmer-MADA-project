@@ -20,11 +20,12 @@ library(vip) #for seeing random forest results
 data_location1 <- here::here("data","processed-data","processed_merged_data.rds")
 data_location2 <- here::here("data","processed-data","processed_enviro_data.rds")
 data_location3 <- here::here("data","processed-data","processed_CSS_data.rds")
+data_location4 <- here::here("data","processed-data","processed_merged_weekly_data.rds")
 #load data. 
 mydata <- readRDS(data_location1)
 envirodata <- readRDS(data_location2)
 CSSdata <- readRDS(data_location3)
-
+weeklydata <- readRDS(data_location4)
 
 ######################################
 #Data fitting/statistical analysis
@@ -107,7 +108,7 @@ rngseed <- 1234
 set.seed(rngseed)
 
 train <- df4
-#test <- dfX
+#test <- df
 #I will train on the daily, test on the weekly
 
 lm_mod <- linear_reg()

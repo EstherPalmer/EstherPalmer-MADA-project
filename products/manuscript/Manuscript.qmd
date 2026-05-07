@@ -80,9 +80,7 @@ Deep serotyping was performed as described (Smith et al., 2025). Briefly, at the
 It should be noted that several serovars within this study are polyphyletic, meaning that there are multiple lineages of the same serovar with different genetic backgrounds but the same O and H antigens. DST is able to distinguish between these different lineages as they often have different CRISPR arrays. As such, these lineages are denoted using roman numerals. There are also some serovars that are unable to be distinguished by CRISPR-seroseq, such as Aqua and Inverness, denoted as AquaInve.
 
 ## Data import and cleaning
-_Write code that reads in the file and cleans it so it's ready for analysis. Since this will be fairly long code for most datasets, it might be a good idea to have it in one or several R scripts. If that is the case, explain here briefly what kind of cleaning/processing you do, and provide more details and well documented code somewhere (e.g. as supplement in a paper). All materials, including files that contain code, should be commented well so everyone can follow along._
-
-Data was analyzed using R version 4.5.3.
+Data was analyzed using R version 4.5.3. Data was imported into R, cleaned, and the CRISPR-SeroSeq data was merged with the Environmental and weather data. Sample complexity was calculated by counting the number of serovars in a given sample.
 
 ## Statistical analysis
 
@@ -106,21 +104,29 @@ knitr::include_graphics(here::here("results", "figures", "areaplot.jpeg"))
 ```
 Figure 2: The _Salmonella_ population in an urban creek exhibits dynamic daily changes. Spikes represent the proportion of each sample each serovar represents. Days are numbered from start of sampling.
 
-
-
-Big plot of all the weather/environmental data
+A Pearson's correlation was done to determine if any predictor variables correlate with each other, and variables with a correlation greater than 0.75 were removed from further analysis. EDA plots were created to determine the relationship between complexity and each predictor variable, the kept variables are shown in Figure 3.
 ```{r}
 knitr::include_graphics(here::here("results", "figures", "CombinedEDA.jpeg"))
 ```
 Figure 3: Compexity over variables kept for the full version of the model
 
-## Basic statistical analysis
-Correlation plot of kept variables
-
-
 ## Full analysis
 Two initial models were tried with all variables. A linear model and a random forest model. Linear models have been used by many papers to model for _Salmonella_ prevalence in water. Both models had similar RMSE values, so the linear model was kept as it is easier to interpret.
 
+```{r}
+
+```
+Table 1: stats from both models
+
+```{r}
+
+```
+Table 2: comparison of first to last models, test and train data.
+
+```{r}
+
+```
+Figure 4: residuals of first and last models
 
 # Discussion
 This is the first study to investigate daily changes _Salmonella_ populations in water over a significant period. It reveals dynamic _Salmonella_ populations consisting of environmentally endemic serovars interrupted by sporadic occurrences of other, transient serovars. This study shows rapid temporal changes in _Salmonella_ populations in a suburban creek. While this is not an agricultural watershed and this water is not used for irrigation, the findings from this project indicate that food safety risks posed by surface water contaminated with _Salmonella_ can also change rapidly. A sample taken on a certain day may not accurately represent the microbial risk of the surface water by the time the culture or other detection is completed and confirmed.
