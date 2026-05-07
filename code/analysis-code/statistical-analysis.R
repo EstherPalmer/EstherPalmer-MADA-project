@@ -369,10 +369,20 @@ tbl1 <- gt(tbl1_df) %>%
   cols_label(Train.rmse = "Train rmse", Test.rmse = "Test rmse") %>%
   cols_align(align = "center", columns = 2:3)
 
+tble2_df <- tidy(lm_fit8)
+tble2_df$estimate <- round(tble2_df$estimate, digits = 2)
+tble2_df$std.error <- round(tble2_df$std.error, digits = 2)
+tble2_df$statistic <- round(tble2_df$statistic, digits = 2)
+
+tbl2 <- gt(tble2_df) %>%
+  cols_label(term = "Term", estimate = "Estimate", std.error = "SE", statistic = "Statistic", p.value = "p value") %>%
+  cols_align(align = "center", columns = 2:5)
+
 save_location <- here::here("results", "figures")
 save_location2 <- here::here("results", "tables")
 ggsave("PredictedPlots.jpeg", plot = finRes_comb, path = save_location , width = 6, height = 4)
 gtsave(tbl1, filename = "table1.png", path = save_location2)
+gtsave(tbl2, filename = "table2.png", path = save_location2)
 
 ############################
 #### Serovar correlation
