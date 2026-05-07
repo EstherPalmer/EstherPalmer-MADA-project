@@ -83,11 +83,9 @@ Data was analyzed using R version 4.5.3. Data was imported into R, cleaned, and 
 
 Since linear regressions assume that no variables are correlated, a Pearson's correlation was done to determine if any predictor variables correlate with each other. Predictor variables with a correlation greater than 0.75 were removed from further analysis.
 
-The tidymodels framework was used to create several linear regression models. Subset selection was undergone by iteratively removing the predictor with the largest p-value until only predictors with p< 0.05 remained. A random forest model with all predictors was also done.
-
+The tidymodels framework was used to create several linear regression models. Subset selection was undergone by iteratively removing the predictor with the largest p-value until only predictors with p< 0.05 remained. A random forest model with all predictors was also done. Cross validation was done on all models, and models were compared using rmse.
 
 {{< pagebreak >}}
-
 
 # Results
 
@@ -111,17 +109,18 @@ knitr::include_graphics(here::here("results", "figures", "CombinedEDA.jpeg"))
 Figure 3: Compexity over variables kept for the full version of the model
 
 ## Full analysis
-Two initial models were tried with all variables. A linear model and a random forest model. Linear models have been used by many papers to model for _Salmonella_ prevalence in water. Both models had similar RMSE values, so the linear model was kept as it is easier to interpret.
+Two initial models were tried with all variables, a linear model and a random forest model. Linear models have been used by many papers to model for _Salmonella_ prevalence in water. Both models had similar RMSE values (Table 1), so the linear model was used for further analysis as it is easier to interpret.
 ```{r}
-
+knitr::include_graphics(here::here("results", "tables", "table1.png"))
 ```
-Table 1: comparison of first to last models, test and train data.
+Table 1: Comparison of rmse between all three models.
 
 ```{r}
 knitr::include_graphics(here::here("results", "figures", "PredictedPlots.jpeg"))
 ```
-Figure 4: residuals of first and last models
+Figure 4: Comparison of predicted vs. actual complexity from all three models on the train (A.) Random Forest, (B.) Full Linear Regression, (C.) Final Linear Regression, and test (D.) Random Forest, (E.) Full Linear Regression, (F.) Final Linear Regression, data
 
+There are four variables left after subset selection in the final linear regression model, pH, wind speed, rain, and turbidity (Table 2). Turbidity and pH have a positive impact on complexity, while rainfall and wind speed have negative impacts. Rain and pH have the largest impacts, while turbidity and wind speed have more modest impacts.
 ```{r}
 
 ```
@@ -145,9 +144,8 @@ There have been many attempts to model for _Salmonella_ prevalence in water. Thi
 The amount of data is a limitation in this study, many datasets used in this class contain thousands of datapoints, while this study has far fewer. This lends less statistical power to this study. This dataset also only includes measureable weather and enivornmental variables. However, _Salmonella_ is an enteric pathogen that has been shown to be carried by wildlife and other reserviors. This dataset does not include any information on the movement of such hosts and therefore the predictor variables may not be sufficient to capture the effect of wildlife activity on _Salmonella_.
 
 ## Conclusions
-_What are the main take-home messages?_
 
-
+_Salmonella_ populations in surface water are complex and dynamic, changing frequently. Rainfall, turbidity, pH, and wind speed may have an impact on the complexity of these populations.
 
 
 # References

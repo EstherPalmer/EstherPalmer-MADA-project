@@ -15,6 +15,8 @@ library(ranger) #random forest modeling but different
 library(corrplot) #to make a correlation plot of my variables
 library(vip) #for seeing random forest results
 library(cowplot) #for combining figures
+library(gt) #for making tables
+library(webshot2) #for saving tables
 
 #path to data
 #note the use of the here() package and not absolute paths
@@ -345,6 +347,9 @@ lm_fin_p8
 
 #So after the test data, the random forest model has the best RMSE, by like a lot
 
+############################
+#### making pretty tables/figures
+
 combined_residuals_plot <- plot_grid(lm_p1, lm_p8, rf_p1, lm_fin_p1, lm_fin_p8, rf_fin_p1, labels = c("A.", "B.", "C.", "D.", "E.", "F."), label_size = 12, label_x = .06)
 combined_residuals_plot
 
@@ -354,8 +359,20 @@ finRes_comb <- ggdraw(combined_residuals_plot) +
 finRes_comb
 #I would like it noted that I worked very hard to not have the D. overlap with the axis title
 
+tbl1_df <- data.frame(
+  Model = c("Random Forest", "Linear regression all predictors", "Linear regression after subset selection"), 
+  Train.rmse = c(1.36, 1.39, 1.29),
+  Test.rmse = c(1.15, 1.60, 1.51)
+)
+
+tbl1 <- gt(tbl1_df) %>% 
+  cols_label(Train.rmse = "Train rmse", Test.rmse = "Test rmse") %>%
+  cols_align(align = "center", columns = 2:3)
+
 save_location <- here::here("results", "figures")
+save_location2 <- here::here("results", "tables")
 ggsave("PredictedPlots.jpeg", plot = finRes_comb, path = save_location , width = 6, height = 4)
+gtsave(tbl1, filename = "table1.png", path = save_location2)
 
 ############################
 #### Serovar correlation
