@@ -40,15 +40,13 @@ $*$ These authors contributed equally to this work.
 
 $\land$ Corresponding author: nikki.shariat@uga.edu
 
-$\dagger$ Disclaimer: The opinions expressed in this article are the
-author's own and don't reflect their employer.
 
 {{< pagebreak >}}
 
 
 
 # Summary/Abstract
-
+_Salmonella enterica_ is frequently found in surface water across the United States. Contaminated surface water has been demonstrated to be a food safety risk, as such it is vital to understand when _Salmonella_ enters such systems. This study characterized changes to the _Salmonella_ population of an urban creek by sampling for _Salmonella_ every weekday for six months. Environmental data were collected at the time of sampling, and weather variables were collected from a local weather station. _Salmonella_ prevalence was 97%, with an average of 3.89 serovars per sample. Linear regression modeling found pH, rain, turbidity, and wind speed to be important factor for predicting _Salmonella_ complexity.
 
 # Introduction 
 
@@ -109,11 +107,12 @@ knitr::include_graphics(here::here("results", "figures", "CombinedEDA.jpeg"))
 Figure 3: Compexity over variables kept for the full version of the model
 
 ## Full analysis
-Two initial models were tried with all variables, a linear model and a random forest model. Linear models have been used by many papers to model for _Salmonella_ prevalence in water. Both models had similar RMSE values (Table 1), so the linear model was used for further analysis as it is easier to interpret.
+Two initial models were tried with all variables, a linear model and a random forest model. Linear models have been used by many papers to model for _Salmonella_ prevalence in water. Both the random forest and linear regression with full predictors had similar RMSE values (Table 1), so the linear model was used for further analysis as it is easier to interpret.
+
+Table 1: Comparison of rmse between all three models.
 ```{r}
 knitr::include_graphics(here::here("results", "tables", "table1.png"))
 ```
-Table 1: Comparison of rmse between all three models.
 
 ```{r}
 knitr::include_graphics(here::here("results", "figures", "PredictedPlots.jpeg"))
@@ -121,16 +120,15 @@ knitr::include_graphics(here::here("results", "figures", "PredictedPlots.jpeg"))
 Figure 4: Comparison of predicted vs. actual complexity from all three models on the train (A.) Random Forest, (B.) Full Linear Regression, (C.) Final Linear Regression, and test (D.) Random Forest, (E.) Full Linear Regression, (F.) Final Linear Regression, data
 
 There are four variables left after subset selection in the final linear regression model, pH, wind speed, rain, and turbidity (Table 2). Turbidity and pH have a positive impact on complexity, while rainfall and wind speed have negative impacts. Rain and pH have the largest impacts, while turbidity and wind speed have more modest impacts.
+
+Table 2: Final predictor values of subset selection LR model
 ```{r}
 knitr::include_graphics(here::here("results", "tables", "table2.png"))
 ```
-Table 2: Final predictor values of subset selection LR model
 
 
 # Discussion
-This is the first study to investigate daily changes _Salmonella_ populations in water over a significant period. It reveals dynamic _Salmonella_ populations consisting of environmentally endemic serovars interrupted by sporadic occurrences of other, transient serovars. This study shows rapid temporal changes in _Salmonella_ populations in a suburban creek. While this is not an agricultural watershed and this water is not used for irrigation, the findings from this project indicate that food safety risks posed by surface water contaminated with _Salmonella_ can also change rapidly. A sample taken on a certain day may not accurately represent the microbial risk of the surface water by the time the culture or other detection is completed and confirmed.
-
-As such, a good model for determining _Salmonella_ risk is necessary.
+This is the first study to investigate daily changes _Salmonella_ populations in water over a significant period. It reveals dynamic _Salmonella_ populations consisting of environmentally endemic serovars interrupted by sporadic occurrences of other, transient serovars. This study shows rapid temporal changes in _Salmonella_ populations in a suburban creek. While this is not an agricultural watershed and this water is not used for irrigation, the findings from this project indicate that food safety risks posed by surface water contaminated with _Salmonella_ can also change rapidly. A sample taken on a certain day may not accurately represent the microbial risk of the surface water by the time the culture or other detection is completed and confirmed. As such, a good model for determining _Salmonella_ risk is necessary.
 
 ## Summary and Interpretation
 
@@ -145,28 +143,48 @@ The amount of data is a limitation in this study, many datasets used in this cla
 
 ## Conclusions
 
-_Salmonella_ populations in surface water are complex and dynamic, changing frequently. Rainfall, turbidity, pH, and wind speed may have an impact on the complexity of these populations.
+_Salmonella_ populations in surface water are complex and dynamic, changing frequently. Modeling for complexity can be a valid alternative to modeling for prevalence in surface water systems, especially when prevalence is high. Rainfall, turbidity, pH, and wind speed may have an impact on the complexity of these populations. 
 
 
 # References
 Deaven, A. M., Ferreira, C. M., Reed, E. A., Chen See, J. R., Lee, N. A., Almaraz, E., Rios, P. C., Marogi, J. G., Lamendella, R., Zheng, J., Bell, R. L., & Shariat, N. W. (2021). Salmonella Genomics and Population Analyses Reveal High Inter- and Intraserovar Diversity in Freshwater. Applied and Environmental Microbiology, 87(6), e02594-20. https://doi.org/10.1128/AEM.02594-20
+
 Dieter, C. A., Maupin, M. A., Caldwell, R. R., Harris, M. A., Ivahnenko, T. I., Lovelace, J. K., Barber, N. L., & Linsey, K. S. (2018). Estimated use of water in the United States in 2015. In Circular (No. 1441). U.S. Geological Survey. https://doi.org/10.3133/cir1441
+
 FDA. (2025). Outbreak Investigation of Salmonella: Cucumbers (June 2024). FDA. https://www.fda.gov/food/outbreaks-foodborne-illness/outbreak-investigation-salmonella-cucumbers-june-2024
+
 FDA. (2024a). Factors Potentially Contributing to the Contamination of Peaches Implicated in the Summer 2020 Outbreak of Salmonella Enteritidis. FDA. https://www.fda.gov/food/outbreaks-foodborne-illness/factors-potentially-contributing-contamination-peaches-implicated-summer-2020-outbreak-salmonella
+
 FDA, H. F. (2024b). Factors Potentially Contributing to the Contamination of Red Onions Implicated in the Summer 2020 Outbreak of Salmonella Newport. FDA. https://www.fda.gov/food/outbreaks-foodborne-illness/factors-potentially-contributing-contamination-red-onions-implicated-summer-2020-outbreak-salmonella
+
 Gorski, L., Parker, C. T., Liang, A., Cooley, M. B., Jay-Russell, M. T., Gordus, A. G., Atwill, E. R., & Mandrell, R. E. (2011). Prevalence, distribution, and diversity of Salmonella enterica in a major produce region of California. Applied and Environmental Microbiology, 77(8), 2734–2748. https://doi.org/10.1128/AEM.02321-10
+
 Goyal, S. M., Gerba, C. P., & Melnick, J. L. (1977). Occurrence and distribution of bacterial indicators and pathogens in canal communities along the Texas coast. Applied and Environmental Microbiology, 34(2), 139–149. https://doi.org/10.1128/aem.34.2.139-149.1977
+
 Greene, S. K., Daly, E. R., Talbot, E. A., Demma, L. J., Holzbauer, S., Patel, N. J., Hill, T. A., Walderhaug, M. O., Hoekstra, R. M., Lynch, M. F., & Painter, J. A. (2008). Recurrent multistate outbreak of Salmonella Newport associated with tomatoes from contaminated fields, 2005. Epidemiology and Infection, 136(2), 157–165. https://doi.org/10.1017/S095026880700859X
+
 Grimont, P. A. D. (n.d.). Antigenic Formulae of the Salmonella Serovars. Institut Pasteur. Retrieved https://www.pasteur.fr/sites/default/files/veng_0.pdf
+
 Havelaar, A. H., Vazquez, K. M., Topalcengiz, Z., Muñoz-Carpena, R., & Danyluk, M. D. (2017). Evaluating the U.S. Food Safety Modernization Act Produce Safety Rule Standard for Microbial Quality of Agricultural Water for Growing Produce. Journal of Food Protection, 80(11), 1832–1841. https://doi.org/10.4315/0362-028X.JFP-17-122
+
 Li, B., Jackson, S. A., Gangiredla, J., Wang, W., Liu, H., Tall, B. D., Beaubrun, J. J.-G., Jay-Russell, M., Vellidis, G., & Elkins, C. A. (2015). Genomic Evidence Reveals Numerous Salmonella enterica Serovar Newport Reintroduction Events in Suwannee Watershed Irrigation Ponds. Applied and Environmental Microbiology, 81(24), 8243–8253. https://doi.org/10.1128/AEM.02179-15
+
 Love, M. I., Huber, W., & Anders, S. (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15(12), 550. https://doi.org/10.1186/s13059-014-0550-8
+
 Maurer, J. J., Martin, G., Hernandez, S., Cheng, Y., Gerner-Smidt, P., Hise, K. B., D’Angelo, M. T., Cole, D., Sanchez, S., Madden, M., Valeika, S., Presotto, A., & Lipp, E. K. (2015). Diversity and Persistence of Salmonella enterica Strains in Rural Landscapes in the Southeastern United States. PLOS ONE, 10(7), e0128937. https://doi.org/10.1371/journal.pone.0128937
+
 McEgan, R., Mootian, G., Goodridge, L. D., Schaffner, D. W., & Danyluk, M. D. (2013). Predicting Salmonella populations from biological, chemical, and physical indicators in Florida surface waters. Applied and Environmental Microbiology, 79(13), 4094–4105. https://doi.org/10.1128/AEM.00777-13
+
 Murphy, C. M., Weller, D. L., & Strawn, L. K. (2024). Scale and detection method impacted Salmonella prevalence and diversity in ponds. Science of The Total Environment, 907, 167812. https://doi.org/10.1016/j.scitotenv.2023.167812
+
 Pal, A., Jackson, A. P., Urrutia, A., Macklin, K. S., Price, S. B., Buhr, R. J., & Bourassa, D. V. (2022). Research Note: Bacterial composition of settled dust during growout of broiler chickens. Poultry Science, 101(2), 101602. https://doi.org/10.1016/j.psj.2021.101602
+
 Santiago-Rodriguez, T. M., Tremblay, R. L., Toledo-Hernandez, C., Gonzalez-Nieves, J. E., Ryu, H., Santo Domingo, J. W., & Toranzos, G. A. (2012). Microbial quality of tropical inland waters and effects of rainfall events. Applied and Environmental Microbiology, 78(15), 5160–5169. https://doi.org/10.1128/AEM.07773-11
+
 Smith, J. C., Siceloff, A. T., Shirazi, S. M., Bell, R. L., & Shariat, N. W. (2025). A two-year study of Salmonella in four natural watersheds highlights the need for increased environmental Salmonella surveillance to close the One Health loop. Applied and Environmental Microbiology, 91(12), e01770-25. https://doi.org/10.1128/aem.01770-25
+
 Strawn, L. K., Gröhn, Y. T., Warchocki, S., Worobo, R. W., Bihn, E. A., & Wiedmann, M. (2013). Risk factors associated with Salmonella and Listeria monocytogenes contamination of produce fields. Applied and Environmental Microbiology, 79(24), 7618–7627. https://doi.org/10.1128/AEM.02831-13
+
 Uzzau, S., Brown, D. J., Wallis, T., Rubino, S., Leori, G., Bernard, S., Casadesús, J., Platt, D. J., & Olsen, J. E. (2000). Host adapted serotypes of Salmonella enterica. Epidemiology and Infection, 125(2), 229–255. https://doi.org/10.1017/s0950268899004379
+
 Weller, D., Brassill, N., Rock, C., Ivanek, R., Mudrak, E., Roof, S., Ganda, E., & Wiedmann, M. (2020). Complex interactions between weather, and microbial and physicochemical water quality impact the likelihood of detecting foodborne pathogens in agricultural water. Frontiers in Microbiology, 11. https://doi.org/10.3389/fmicb.2020.00134

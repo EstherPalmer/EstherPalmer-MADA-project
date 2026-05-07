@@ -14,6 +14,7 @@ data_location2 <- here::here("data","processed-data","processed_CSS_data.rds")
 #load data
 mydata <- readRDS(data_location)
 CSSdata <- readRDS(data_location2)
+#Note: descriptions of variables in the processing code readme file
 
 ## ---- ComplexityByTime -------
 plot1 <- mydata %>% ggplot(aes(x=Day, y=complexity)) + geom_point() +
