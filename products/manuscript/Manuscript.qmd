@@ -122,7 +122,7 @@ Figure 4: Comparison of predicted vs. actual complexity from all three models on
 
 There are four variables left after subset selection in the final linear regression model, pH, wind speed, rain, and turbidity (Table 2). Turbidity and pH have a positive impact on complexity, while rainfall and wind speed have negative impacts. Rain and pH have the largest impacts, while turbidity and wind speed have more modest impacts.
 ```{r}
-
+knitr::include_graphics(here::here("results", "tables", "table2.png"))
 ```
 Table 2: Final predictor values of subset selection LR model
 
