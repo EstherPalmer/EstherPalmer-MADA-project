@@ -237,6 +237,16 @@ area <- df2long %>% ggplot(aes(x=Day, y=value, fill=Serovar)) + geom_area() +
 area
 #creates an area plot (spikey graph) showing proportion of each serovar over time
 
+clrs_highlight <- c("#424242", "#ababab", "#c4c4c4", "#e0eee0", "#8f8f8f", "#dedede", "#EEE9E9", "#c2c2c2", "#b0b0b0", "#8B8878", "#e8e8e8", "#bfbfbf", "#ff3030")
+#This is to set colors for the area plot
+
+area2 <- df2long %>% ggplot(aes(x=Day, y=value, fill=Serovar)) + geom_area() + 
+  scale_y_continuous(expand = c(0,0)) + scale_x_continuous(expand = c(0,0)) + 
+  scale_fill_manual(values = clrs_highlight) +
+  ylab("Relative Serovar Frequency") + xlab("Days since start of sampling")
+area2
+ggsave("areaplot_highlight_Mont.jpeg", plot = area2, path = save_location , width = 12, height = 4.5)
+
 save_location <- here::here("results", "figures")
 ggsave("areaplot.jpeg", plot = area, path = save_location , width = 12, height = 4.5)
 ggsave("complexity_histogram.jpeg", plot = complexhist, path = save_location, width = 5, height = 3)
